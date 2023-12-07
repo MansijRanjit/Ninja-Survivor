@@ -1,35 +1,36 @@
 import { Ninja } from "./Ninja.js";
 import { enemy1 } from "./Enemy.js";
 import { Level1 } from "./Level1.js";
-
-const GameView={
-    HEIGHT:222,
-    WIDTH:384
-}
+import { FighterDirection,GameView } from "./Constants.js";
 
 window.addEventListener('load',function(){
     const canvas =document.querySelector("canvas");
     const context=canvas.getContext("2d");
+    context.imageSmoothingEnabled=false;
 
     canvas.width=GameView.WIDTH;
     canvas.height=GameView.HEIGHT;
 
-    const turtle=new enemy1(90,130,150);
-    const player =new Ninja(90,130,-150);
+    const turtle=new enemy1(190,220,FighterDirection.LEFT);
+    const player =new Ninja(90,220,FighterDirection.RIGHT);
     const level1= new Level1();
 
-    let prevTime=0;
-    let secPassed=0;
+    let frameTime={
+        prevTime: 0,
+        secPassed:0
+    }
 
     function animate(time){
         window.requestAnimationFrame(animate);
 
-        secPassed=(time - prevTime) /1000;
-        prevTime=time;
+        frameTime={
+            secPassed : (time - frameTime.prevTime) /1000,
+            prevTime : time
+        }
        // console.log(secPassed)
 
-        player.update(secPassed,context);
-        turtle.update(secPassed,context);
+        player.update(frameTime,context);
+        turtle.update(frameTime,context);
 
         level1.draw(context);
         player.draw(context);
