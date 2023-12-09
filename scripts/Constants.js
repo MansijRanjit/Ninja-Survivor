@@ -14,5 +14,8 @@ export const FighterState={
     WALK_BACKWARD:'walkBackward',
     JUMP_UP:'jumpUp',
     JUMP_FORWARD: 'jumpForward',
-    JUMP_BACKWARD:'jumpBackward'
+    JUMP_BACKWARD:'jumpBackward',
+    CROUCH_DOWN:'crouchDown',
+    CROUCH:'crouch',
+    CROUCH_UP:'crouchUp',
 };
