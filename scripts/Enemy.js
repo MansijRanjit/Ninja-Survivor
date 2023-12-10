@@ -1,4 +1,4 @@
-import { FighterState } from "./Constants.js";
+import { FighterState, PushBox } from "./Constants.js";
 import { Fighter } from "./Fighter.js";
 
 export class enemy1 extends Fighter{
@@ -9,33 +9,33 @@ export class enemy1 extends Fighter{
 
         this.frames= new Map([
             //Idle
-            ['idle-1',[[61,3,68,86],[34,85]]],
-            ['idle-2',[[135,1,64,88],[31,88]]],
-            ['idle-3',[[206,1,65,89],[32,89]]],
+            ['idle-1',[[[61,3,68,86],[34,85]],PushBox.IDLE]],
+            ['idle-2',[[[135,1,64,88],[31,88]],PushBox.IDLE]],
+            ['idle-3',[[[206,1,65,89],[32,89]],PushBox.IDLE]],
 
             //Move Forward
-            ['forward-1',[[5,108,66,85],[32,85]]],
-            ['forward-2',[[76,105,65,88],[31,87]]],
-            ['forward-3',[[149,101,65,91],[33,90]]],
-            ['forward-4',[[220,101,65,90],[34,88]]],
-            ['forward-5',[[294,102,66,85],[33,86]]],
+            ['forward-1',[[[5,108,66,85],[32,85]],PushBox.IDLE]],
+            ['forward-2',[[[76,105,65,88],[31,87]],PushBox.IDLE]],
+            ['forward-3',[[[149,101,65,91],[33,90]],PushBox.IDLE]],
+            ['forward-4',[[[220,101,65,90],[34,88]],PushBox.IDLE]],
+            ['forward-5',[[[294,102,66,85],[33,86]],PushBox.IDLE]],
 
             //Jump Up
-            ['jump-up-1',[[7,711,102,89],[51,87]]],
-            ['jump-up-2',[[117,713,102,74],[50,73]]],
-            ['jump-up-3',[[231,699,61,88],[31,87]]],
-            ['jump-up-4',[[301,701,58,94],[28,92]]],
+            ['jump-up-1',[[[7,711,102,89],[51,87]],PushBox.JUMP]],
+            ['jump-up-2',[[[117,713,102,74],[50,73]],PushBox.JUMP]],
+            ['jump-up-3',[[[231,699,61,88],[31,87]],PushBox.JUMP]],
+            ['jump-up-4',[[[301,701,58,94],[28,92]],PushBox.JUMP]],
 
             //Jump Forward/Backward
-            ['jump-roll-1',[[371,710,44,42],[22,42]]],
-            ['jump-roll-2',[[427,708,41,44],[21,44]]],
-            ['jump-roll-3',[[472,711,44,41],[23,41]]],
-            ['jump-roll-4',[[520,709,41,44],[20,43]]],
+            ['jump-roll-1',[[[371,710,44,42],[22,42]],PushBox.JUMP]],
+            ['jump-roll-2',[[[427,708,41,44],[21,44]],PushBox.JUMP]],
+            ['jump-roll-3',[[[472,711,44,41],[23,41]],PushBox.JUMP]],
+            ['jump-roll-4',[[[520,709,41,44],[20,43]],PushBox.JUMP]],
 
             //Crouch
-            ['crouch-1', [[22,418,66,76],[33,65]]],
-            ['crouch-2',[[103,424,67,69],[34,58]]],
-            ['crouch-3',[[181,427,56,67],[28,57]]]
+            ['crouch-1', [[[22,418,66,76],[33,65]],PushBox.IDLE]],
+            ['crouch-2',[[[103,424,67,69],[34,58]],PushBox.BEND]],
+            ['crouch-3',[[[181,427,56,67],[28,57]],PushBox.CROUCH]]
         ]);
 
         this.animations ={

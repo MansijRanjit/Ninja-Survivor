@@ -3,6 +3,7 @@ import { enemy1 } from "./Enemy.js";
 import { Level1 } from "./Level1.js";
 import { FighterDirection,GameView } from "./Constants.js";
 import { inputKeyboardEvents } from "./InputKeys.js";
+import { StatusBar } from "./overlays/StatusBar.js";
 
 window.addEventListener('load',function(){
     const canvas =document.querySelector("canvas");
@@ -16,6 +17,14 @@ window.addEventListener('load',function(){
     const turtle=new enemy1(190,220,FighterDirection.LEFT,1);
     const level1= new Level1();
 
+    this.fighters=[
+        player,turtle
+    ]
+    const statusBar= new StatusBar(this.fighters);
+
+    //placing opponrnts for adjusting directions
+    player.opponent=turtle;
+    turtle.opponent=player;
     
     inputKeyboardEvents();
 
@@ -40,6 +49,9 @@ window.addEventListener('load',function(){
         level1.draw(context);
         player.draw(context);
         turtle.draw(context);
+
+        statusBar.update(frameTime);
+        statusBar.draw(context);
 
         //console.log(time);
     }

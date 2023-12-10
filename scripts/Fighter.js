@@ -1,5 +1,6 @@
-import { FighterDirection, FighterState } from "./Constants.js";
+import { FighterDirection, FighterState, PUSH_FRICTION } from "./Constants.js";
 import * as inputKey from "./InputKeys.js";
+import { rectCollision } from "./collisions.js";
 
 export class Fighter{
     constructor(name,x,y,direction,playerId){
@@ -27,6 +28,9 @@ export class Fighter{
         };
         this.gravity=1000;
         this.currentState=FighterState.IDLE;//self
+
+        this.opponent;
+        this.pushBox= {x:0, y:0, width:0, height:0};
 
         this.states= {
             [FighterState.IDLE]:{
@@ -79,6 +83,47 @@ export class Fighter{
         this.changeState(FighterState.IDLE);
     }
 
+    //Resets Velocities
+    resetVelocities(){
+        this.velocity.x=0;
+        this.velocity.y=0
+    }
+
+    //Checking if the animation is the last one
+    isAnimationCompleted(){
+        return this.animations[this.currentState][this.animationFrame][1] === -2
+    }
+
+    //Calling rectCollision to check collision and returns bool value
+    hasCollidedWithOpponent =() => rectCollision(
+        this.position.x+this.pushBox.x,
+        this.position.y+ this.pushBox.y,
+        this.pushBox.width,
+        this.pushBox.height,
+        this.opponent.position.x + this.opponent.pushBox.x,
+        this.opponent.position.y + this.opponent.pushBox.y,
+        this.opponent.pushBox.width,
+        this.opponent.pushBox.height
+    )
+
+    //returns direction to make fighter face each other
+    getDirection(){
+        if(this.position.x + this.pushBox.x +this.pushBox.width <= this.opponent.position.x + this.opponent.pushBox.x){
+            return FighterDirection.RIGHT;
+        }
+        else if(this.position.x+this.pushBox.x>=this.opponent.position.x + this.opponent.pushBox.x + this.opponent.pushBox.width){
+            return FighterDirection.LEFT;
+        }
+        return this.direction;
+    }
+    
+    //returns push box coordinates
+    getPushBox(frameKey){
+        const [,[x,y,width,height]=[0,0,0,0]]= this.frames.get(frameKey);
+        return {x,y,width,height};
+    }
+
+    //Changing currentState to newState and calling init() of the state
     changeState(newState){
         if(newState == this.currentState || !this.states[newState].validFrom.includes(this.currentState)) return;
 
@@ -91,8 +136,7 @@ export class Fighter{
     }
 
     handleIdleInit(){
-        this.velocity.x=0;
-        this.velocity.y=0
+        this.resetVelocities();
     }
     handleMoveInit(){
         this.velocity.x =this.initialVelocity.x[this.currentState] ?? 0;// returns 0 when the left-hand operand is null or undefined. If the initial velocity for the current state is not defined, it will default to 0
@@ -105,35 +149,46 @@ export class Fighter{
         this.handleMoveInit();
     }
     handleCrouchDownInit(){
-        this.handleIdleInit();
-
+        this.resetVelocities();
     }
 
     handleIdleState(){
-        if(inputKey.isUp(this.playerId)) this.changeState(FighterState.JUMP_UP);
-
-        if(inputKey.isDown(this.playerId)) this.changeState(FighterState.CROUCH_DOWN);
-
-        if(inputKey.isBackward(this.playerId,this.direction)) this.changeState(FighterState.WALK_BACKWARD);
-
-        if(inputKey.isForward(this.playerId,this.direction)) this.changeState(FighterState.WALK_FORWARD);
-
+        if(inputKey.isUp(this.playerId)) {
+            this.changeState(FighterState.JUMP_UP);
+        }
+        else if(inputKey.isDown(this.playerId)) {
+            this.changeState(FighterState.CROUCH_DOWN);
+        }
+        else if(inputKey.isBackward(this.playerId,this.direction)){
+            this.changeState(FighterState.WALK_BACKWARD);   
+        } 
+        else if(inputKey.isForward(this.playerId,this.direction)) {
+            this.changeState(FighterState.WALK_FORWARD);
+        }
     }
 
     handleWalkForwardState(){
-        if(!inputKey.isForward(this.playerId,this.direction)) this.changeState(FighterState.IDLE);
-
-        if(inputKey.isUp(this.playerId)) this.changeState(FighterState.JUMP_FORWARD);
-
-        if(inputKey.isDown(this.playerId)) this.changeState(FighterState.CROUCH_DOWN);
+        if(!inputKey.isForward(this.playerId,this.direction)) {
+            this.changeState(FighterState.IDLE);
+        }
+        else if(inputKey.isUp(this.playerId)) {
+            this.changeState(FighterState.JUMP_FORWARD);
+        }
+        else if(inputKey.isDown(this.playerId)) {
+            this.changeState(FighterState.CROUCH_DOWN);
+        }
     }
 
     handleWalkBackwardState(){
-        if(!inputKey.isBackward(this.playerId,this.direction)) this.changeState(FighterState.IDLE);
-
-        if(inputKey.isUp(this.playerId)) this.changeState(FighterState.JUMP_BACKWARD);
-
-        if(inputKey.isDown(this.playerId)) this.changeState(FighterState.CROUCH_DOWN);
+        if(!inputKey.isBackward(this.playerId,this.direction)) {
+            this.changeState(FighterState.IDLE);
+        }
+        else if(inputKey.isUp(this.playerId)) {
+            this.changeState(FighterState.JUMP_BACKWARD);
+        }
+        else if(inputKey.isDown(this.playerId)) {
+            this.changeState(FighterState.CROUCH_DOWN);
+        }
     }
 
     handleJumpState(time){
@@ -149,20 +204,19 @@ export class Fighter{
         if(!inputKey.isDown(this.playerId)) this.changeState(FighterState.CROUCH_UP);
     }
     handleCrouchDownState(){
-        if(this.animations[this.currentState][this.animationFrame][1] === -2){
+        if(this.isAnimationCompleted()){
             this.changeState(FighterState.CROUCH);
         }
     }
     handleCrouchUpState(){
-        if(this.animations[this.currentState][this.animationFrame][1] === -2){
+        if(this.isAnimationCompleted()){
             this.changeState(FighterState.IDLE);
         }
     }
 
-    updateLevelConstraints(context){
+    updateLevelConstraints(time,context){
         //Preventing players to move outside canvas
-
-        const [[, , width]]=this.frames.get(this.animations[this.currentState][this.animationFrame][0]);
+        const [[[, , width]]]=this.frames.get(this.animations[this.currentState][this.animationFrame][0]);
 
         if(this.position.x + width/2 >= context.canvas.width){
             this.position.x= context.canvas.width-width;
@@ -171,19 +225,42 @@ export class Fighter{
             this.position.x=width;
         }
 
+        //Prevent overlap on collision between fighters
+        if(this.hasCollidedWithOpponent()){
+            if(this.position.x <= this.opponent.position.x){
+                this.position.x =Math.max(
+                    (this.opponent.position.x + this.opponent.pushBox.x) - ( this.pushBox.x + this.pushBox.width),//this.pushBox.width
+                )
+                //Pushing opponent to right
+                if([FighterState.IDLE,FighterState.CROUCH,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD].includes(this.opponent.currentState)){
+                    this.opponent.position.x += PUSH_FRICTION* time.secPassed;
+                }
+            }
+            if(this.position.x >= this.opponent.position.x){
+                this.position.x=Math.min(
+                    (this.opponent.position.x + this.opponent.pushBox.x + this.opponent.pushBox.width
+                        )+(this.pushBox.width + this.pushBox.x), context.canvas.width- this.pushBox.width
+                )
+                //Pushing opponent to left
+                if([FighterState.IDLE,FighterState.CROUCH,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD].includes(this.opponent.currentState)){
+                    this.opponent.position.x -= PUSH_FRICTION* time.secPassed;
+                }
+            }
+        }
     }
 
     updateAnimation(time){
         //Adding delay of frameDelay miliseconds between Animation Frame ,and updating animation frame
 
         const animation= this.animations[this.currentState];
-        const [,frameDelay]=animation[this.animationFrame];
+        const [frameKey,frameDelay]=animation[this.animationFrame];
 
         if(time.prevTime > this.animationTimer + frameDelay){
             this.animationTimer=time.prevTime;
 
             if(frameDelay>0){
                 this.animationFrame++;
+                this.pushBox= this.getPushBox(frameKey);
             }
     
            if(this.animationFrame>= animation.length)
@@ -198,30 +275,59 @@ export class Fighter{
         this.position.x += (this.velocity.x * this.direction) *time.secPassed;
         this.position.y += this.velocity.y *time.secPassed;
 
+        //changing direction of fighters on changing positions
+        if(
+            [FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD].includes(this.currentState)
+        ){
+            this.direction=this.getDirection();
+        }
+
         this.states[this.currentState].update(time,context);//calls  update: ..State()
         this.updateAnimation(time);
-        this.updateLevelConstraints(context);
+        this.updateLevelConstraints(time,context);
     }
 
     //Placing + sign at origin
     drawDebug(context){
+        const [frameKey]= this.animations[this.currentState][this.animationFrame];
+        const pushBox= this.getPushBox(frameKey);
+
         context.lineWidth=1;
 
+        //Push Box
+        context.beginPath();
+        context.strokeStyle ='#55FF55';
+        context.fillStyle='#55FF5555';
+        context.fillRect(
+            Math.floor(this.position.x + pushBox.x)+0.5,
+            Math.floor(this.position.y+ pushBox.y)+0.5,
+            pushBox.width,
+            pushBox.height,
+        );
+        context.rect(
+            Math.floor(this.position.x + pushBox.x)+0.5,
+            Math.floor(this.position.y +pushBox.y)+0.5,
+            pushBox.width,
+            pushBox.height,
+        );
+        context.stroke();
+
+        //Origin
         context.beginPath();
         context.strokeStyle="white";
-        context.moveTo(Math.floor(this.position.x) -5.5, Math.floor(this.position.y));
-        context.lineTo(Math.floor(this.position.x) +4.5 , Math.floor(this.position.y));
-        context.moveTo(Math.floor(this.position.x),Math.floor(this.position.y)-5.5);
-        context.lineTo(Math.floor(this.position.x),Math.floor(this.position.y)+4.5)
+        context.moveTo(Math.floor(this.position.x) -4, Math.floor(this.position.y));
+        context.lineTo(Math.floor(this.position.x) +5 , Math.floor(this.position.y));
+        context.moveTo(Math.floor(this.position.x),Math.floor(this.position.y)-5);
+        context.lineTo(Math.floor(this.position.x),Math.floor(this.position.y)+4)
         context.stroke();
     }
 
     draw(context){
         const [frameKey]=this.animations[this.currentState][this.animationFrame];//destructuring to extract first element of array
-        const [
+        const [[
             [x,y,width,height],
             [originX,originY]
-        ]=this.frames.get(frameKey);
+        ]]=this.frames.get(frameKey);
 
         context.scale(this.direction,1);
         
