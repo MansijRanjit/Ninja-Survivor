@@ -1,4 +1,4 @@
-import { FighterState, PushBox } from "./Constants.js";
+import { FighterState, HurtBoxTurtle, PushBox } from "./Constants.js";
 import { Fighter } from "./Fighter.js";
 
 export class enemy1 extends Fighter{
@@ -9,16 +9,16 @@ export class enemy1 extends Fighter{
 
         this.frames= new Map([
             //Idle
-            ['idle-1',[[[61,3,68,86],[34,85]],PushBox.IDLE]],
-            ['idle-2',[[[135,1,64,88],[31,88]],PushBox.IDLE]],
-            ['idle-3',[[[206,1,65,89],[32,89]],PushBox.IDLE]],
+            ['idle-1',[[[61,3,68,86],[34,85]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['idle-2',[[[135,1,64,88],[31,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['idle-3',[[[206,1,65,89],[32,89]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
 
             //Move Forward
-            ['forward-1',[[[5,108,66,85],[32,85]],PushBox.IDLE]],
-            ['forward-2',[[[76,105,65,88],[31,87]],PushBox.IDLE]],
-            ['forward-3',[[[149,101,65,91],[33,90]],PushBox.IDLE]],
-            ['forward-4',[[[220,101,65,90],[34,88]],PushBox.IDLE]],
-            ['forward-5',[[[294,102,66,85],[33,86]],PushBox.IDLE]],
+            ['forward-1',[[[5,108,66,85],[32,85]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['forward-2',[[[76,105,65,88],[31,87]],PushBox.IDLE,HurtBoxTurtle.direction]],
+            ['forward-3',[[[149,101,65,91],[33,90]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['forward-4',[[[220,101,65,90],[34,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['forward-5',[[[294,102,66,85],[33,86]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
 
             //Jump Up
             ['jump-up-1',[[[7,711,102,89],[51,87]],PushBox.JUMP]],
@@ -35,7 +35,17 @@ export class enemy1 extends Fighter{
             //Crouch
             ['crouch-1', [[[22,418,66,76],[33,65]],PushBox.IDLE]],
             ['crouch-2',[[[103,424,67,69],[34,58]],PushBox.BEND]],
-            ['crouch-3',[[[181,427,56,67],[28,57]],PushBox.CROUCH]]
+            ['crouch-3',[[[181,427,56,67],[28,57]],PushBox.CROUCH]],
+
+             //Slash
+             ['slash-1',[[[75,222,80,78],[38,78]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
+             ['slash-2',[[[185,214,67,82],[32,82]],PushBox.IDLE,HurtBoxTurtle.IDLE,[17,-85,40,14]]],
+             ['slash-3',[[[266,227,86,65],[43,85]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
+        
+ 
+             //Kick
+             ['kick-1',[[[1,319,74,82],[27,82]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,30,14]]],
+             ['kick-2',[[[89,309,97,96],[38,86]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,30,14]]],
         ]);
 
         this.animations ={
@@ -75,6 +85,16 @@ export class enemy1 extends Fighter{
             [
                 ['crouch-3',60],['crouch-2',60],['crouch-1',-2]
              ],
+
+            [FighterState.SLASH]:
+             [
+                ['slash-1',260],['slash-2',260],['slash-3',260],['slash-2',260],['slash-1',-2]
+             ],
+
+            [FighterState.KICK]:
+            [
+                ['kick-1',260],['kick-2',260],['kick-1',-2]
+            ], 
 
         };
 

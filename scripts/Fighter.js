@@ -1,6 +1,7 @@
-import { FighterDirection, FighterState, PUSH_FRICTION } from "./Constants.js";
+import { FighterAttackType, FighterDirection, FighterState, PUSH_FRICTION } from "./Constants.js";
 import * as inputKey from "./InputKeys.js";
-import { rectCollision } from "./collisions.js";
+import { Control } from "./KeysControl.js";
+import { boxOverlap, getActualBoxDimensions, rectCollision } from "./collisions.js";
 
 export class Fighter{
     constructor(name,x,y,direction,playerId){
@@ -30,13 +31,16 @@ export class Fighter{
         this.currentState=FighterState.IDLE;//self
 
         this.opponent;
-        this.pushBox= {x:0, y:0, width:0, height:0};
-
+        this.boxes ={
+            push: {x:0, y:0, width:0, height:0},
+            hurt:[[0,0,0,0],[0,0,0,0],[0,0,0,0]],
+            hit: {x:0, y:0, width:0, height:0},
+        }
         this.states= {
             [FighterState.IDLE]:{
                 init: this.handleIdleInit.bind(this),
                 update: this.handleIdleState.bind(this),
-                validFrom:[ FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD,FighterState.CROUCH_UP]
+                validFrom:[ FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD,FighterState.CROUCH_UP,FighterState.SLASH,FighterState.KICK]
             },
             [FighterState.WALK_FORWARD]:{
                 init: this.handleMoveInit.bind(this),
@@ -78,6 +82,18 @@ export class Fighter{
                 update: this.handleCrouchUpState.bind(this),
                 validFrom:[FighterState.CROUCH]
             },
+            [FighterState.SLASH]:{
+                attackType:FighterAttackType.SLASH,
+                init: this.handleSlashInit.bind(this),
+                update:this.handleSlashState.bind(this),
+                validFrom:[FighterState.IDLE,FighterState.WALK_BACKWARD,FighterState.WALK_FORWARD]
+            },
+            [FighterState.KICK]:{
+                attackType:FighterAttackType.KICK,
+                init: this.handleKickInit.bind(this),
+                update: this.handleKickState.bind(this),
+                validFrom:[FighterState.IDLE,FighterState.WALK_BACKWARD,FighterState.WALK_FORWARD]
+            }
         }
 
         this.changeState(FighterState.IDLE);
@@ -96,31 +112,39 @@ export class Fighter{
 
     //Calling rectCollision to check collision and returns bool value
     hasCollidedWithOpponent =() => rectCollision(
-        this.position.x+this.pushBox.x,
-        this.position.y+ this.pushBox.y,
-        this.pushBox.width,
-        this.pushBox.height,
-        this.opponent.position.x + this.opponent.pushBox.x,
-        this.opponent.position.y + this.opponent.pushBox.y,
-        this.opponent.pushBox.width,
-        this.opponent.pushBox.height
+        this.position.x+this.boxes.push.x,
+        this.position.y+ this.boxes.push.y,
+        this.boxes.push.width,
+        this.boxes.push.height,
+        this.opponent.position.x + this.opponent.boxes.push.x,
+        this.opponent.position.y + this.opponent.boxes.push.y,
+        this.opponent.boxes.push.width,
+        this.opponent.boxes.push.height
     )
 
     //returns direction to make fighter face each other
     getDirection(){
-        if(this.position.x + this.pushBox.x +this.pushBox.width <= this.opponent.position.x + this.opponent.pushBox.x){
+        if(this.position.x + this.boxes.push.x +this.boxes.push.width <= this.opponent.position.x + this.opponent.boxes.push.x){
             return FighterDirection.RIGHT;
         }
-        else if(this.position.x+this.pushBox.x>=this.opponent.position.x + this.opponent.pushBox.x + this.opponent.pushBox.width){
+        else if(this.position.x+this.boxes.push.x>=this.opponent.position.x + this.opponent.boxes.push.x + this.opponent.boxes.push.width){
             return FighterDirection.LEFT;
         }
         return this.direction;
     }
     
     //returns push box coordinates
-    getPushBox(frameKey){
-        const [,[x,y,width,height]=[0,0,0,0]]= this.frames.get(frameKey);
-        return {x,y,width,height};
+    getBoxes(frameKey){
+        const [,
+            [x=0,y=0,width=0,height=0]=[],
+            [head=[0,0,0,0],body=[0,0,0,0],feet=[0,0,0,0]] =[],
+            [hitX=0,hitY=0,hitWidth=0,hitHeight=0]=[],    
+    ]= this.frames.get(frameKey);
+        return{
+            push: {x,y,width,height},
+            hurt: [head,body,feet],
+            hit:{x:hitX,y:hitY,width:hitWidth,height:hitHeight}
+        } 
     }
 
     //Changing currentState to newState and calling init() of the state
@@ -151,6 +175,12 @@ export class Fighter{
     handleCrouchDownInit(){
         this.resetVelocities();
     }
+    handleSlashInit(){
+        this.resetVelocities();
+    }
+    handleKickInit(){
+        this.resetVelocities();
+    }
 
     handleIdleState(){
         if(inputKey.isUp(this.playerId)) {
@@ -164,6 +194,12 @@ export class Fighter{
         } 
         else if(inputKey.isForward(this.playerId,this.direction)) {
             this.changeState(FighterState.WALK_FORWARD);
+        }
+        else if(inputKey.isSlash(this.playerId)){
+            this.changeState(FighterState.SLASH);
+        }
+        else if(inputKey.isKick(this.playerId)){
+            this.changeState(FighterState.KICK);
         }
     }
 
@@ -213,6 +249,14 @@ export class Fighter{
             this.changeState(FighterState.IDLE);
         }
     }
+    handleSlashState(){
+        if(!this.isAnimationCompleted()) return;
+        this.changeState(FighterState.IDLE);
+    }
+    handleKickState(){
+        if(!this.isAnimationCompleted())return;
+        this.changeState(FighterState.IDLE);
+    }
 
     updateLevelConstraints(time,context){
         //Preventing players to move outside canvas
@@ -229,7 +273,7 @@ export class Fighter{
         if(this.hasCollidedWithOpponent()){
             if(this.position.x <= this.opponent.position.x){
                 this.position.x =Math.max(
-                    (this.opponent.position.x + this.opponent.pushBox.x) - ( this.pushBox.x + this.pushBox.width),//this.pushBox.width
+                    (this.opponent.position.x + this.opponent.boxes.push.x) - ( this.boxes.push.x + this.boxes.push.width),//this.boxes.push.width
                 )
                 //Pushing opponent to right
                 if([FighterState.IDLE,FighterState.CROUCH,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD].includes(this.opponent.currentState)){
@@ -238,8 +282,8 @@ export class Fighter{
             }
             if(this.position.x >= this.opponent.position.x){
                 this.position.x=Math.min(
-                    (this.opponent.position.x + this.opponent.pushBox.x + this.opponent.pushBox.width
-                        )+(this.pushBox.width + this.pushBox.x), context.canvas.width- this.pushBox.width
+                    (this.opponent.position.x + this.opponent.boxes.push.x + this.opponent.boxes.push.width
+                        )+(this.boxes.push.width + this.boxes.push.x), context.canvas.width- this.boxes.push.width
                 )
                 //Pushing opponent to left
                 if([FighterState.IDLE,FighterState.CROUCH,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD].includes(this.opponent.currentState)){
@@ -260,7 +304,7 @@ export class Fighter{
 
             if(frameDelay>0){
                 this.animationFrame++;
-                this.pushBox= this.getPushBox(frameKey);
+                this.boxes= this.getBoxes(frameKey);
             }
     
            if(this.animationFrame>= animation.length)
@@ -270,8 +314,35 @@ export class Fighter{
         }
     }
 
-    update(time, context){
+    updateAttackBoxCollided(time){
+        if(!this.states[this.currentState].attackType) return;//if box is not attack returns
 
+        const actualHitBox= getActualBoxDimensions(this.position,this.direction,this.boxes.hit);
+        //boxes .hit ko index change garnu paryo to x ,y,width ,height
+        //console.log(this.boxes.hit);
+        //enemy kick attak not collision detected
+
+        for(const hurt of this.opponent.boxes.hurt){
+            const [x,y,width,height] =hurt;
+            const actualOpponentsHurtBox = getActualBoxDimensions(this.opponent.position,
+            this.opponent.direction,
+            {x,y,width,height}
+            );
+/////////////////////////
+            //console.log(actualHitBox);
+            //console.log(actualOpponentsHurtBox);
+            if(!boxOverlap(actualHitBox, actualOpponentsHurtBox)) return;
+
+            console.log("cool");
+
+            const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
+
+            console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`)
+
+        }
+    }
+
+    update(time, context){
         this.position.x += (this.velocity.x * this.direction) *time.secPassed;
         this.position.y += this.velocity.y *time.secPassed;
 
@@ -285,32 +356,52 @@ export class Fighter{
         this.states[this.currentState].update(time,context);//calls  update: ..State()
         this.updateAnimation(time);
         this.updateLevelConstraints(time,context);
+        this.updateAttackBoxCollided(time);
     }
 
-    //Placing + sign at origin
+    //drawing boxes
+    drawDebugBox(context,dimensions,baseColor){
+        if(!Array.isArray(dimensions)) return;//returns if dimensions not in array format
+        
+        const[x=0, y=0, width=0, height=0]= dimensions;
+
+        context.beginPath();
+        context.strokeStyle =baseColor+'AA';
+        context.fillStyle=baseColor+'44';
+        context.fillRect(
+            Math.floor(this.position.x +(x*this.direction))+0.5,
+            Math.floor(this.position.y+y)+0.5,
+            width*this.direction,
+            height,
+        );
+        context.rect(
+            Math.floor(this.position.x + (x*this.direction))+0.5,
+            Math.floor(this.position.y +y)+0.5,
+            width*this.direction,
+            height,
+        );
+        context.stroke();
+    }
+
+    //Placing + sign at origin and placing boxes
     drawDebug(context){
         const [frameKey]= this.animations[this.currentState][this.animationFrame];
-        const pushBox= this.getPushBox(frameKey);
+        const boxes= this.getBoxes(frameKey);
 
         context.lineWidth=1;
 
         //Push Box
-        context.beginPath();
-        context.strokeStyle ='#55FF55';
-        context.fillStyle='#55FF5555';
-        context.fillRect(
-            Math.floor(this.position.x + pushBox.x)+0.5,
-            Math.floor(this.position.y+ pushBox.y)+0.5,
-            pushBox.width,
-            pushBox.height,
-        );
-        context.rect(
-            Math.floor(this.position.x + pushBox.x)+0.5,
-            Math.floor(this.position.y +pushBox.y)+0.5,
-            pushBox.width,
-            pushBox.height,
-        );
-        context.stroke();
+        this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
+
+        //Hurt Box
+        for (const hurtBox of boxes.hurt){
+            this.drawDebugBox(context,hurtBox,'#7777FF');
+        }
+
+        //Hit Box
+        //console.log(boxes)
+        this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
+        
 
         //Origin
         context.beginPath();

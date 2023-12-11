@@ -1,4 +1,4 @@
-import { FighterState, PushBox } from "./Constants.js";
+import { FighterState, HurtBoxNinja, PushBox } from "./Constants.js";
 import { Fighter } from "./Fighter.js";
 
 export class Ninja extends Fighter{
@@ -9,22 +9,22 @@ export class Ninja extends Fighter{
         
         this.frames=new Map([
             //Idle
-            ['idle-1',[[[250,109,71,105],[36,90]],PushBox.IDLE]],
-            ['idle-2',[[[335,109,72,104],[36,88]],PushBox.IDLE]],
-            ['idle-3',[[[425,110,72,102],[35,87]],PushBox.IDLE]],
-            ['idle-4',[[[509,113,72,101],[35,86]],PushBox.IDLE]],
-            ['idle-5',[[[595,113,72,101],[36,86]],PushBox.IDLE]],
+            ['idle-1',[[[250,109,71,105],[36,90]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['idle-2',[[[335,109,72,104],[36,88]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['idle-3',[[[425,110,72,102],[35,87]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['idle-4',[[[509,113,72,101],[35,86]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['idle-5',[[[595,113,72,101],[36,86]],PushBox.IDLE,HurtBoxNinja.IDLE]],
 
 
             //Move Forward/Backward
-            ['forward-1',[[[198,2411,82,99],[40,84]],PushBox.IDLE]],
-            ['forward-2',[[[305,2410,80,97],[41,83]],PushBox.IDLE]],
-            ['forward-3',[[[421,2412,66,97],[33,83]],PushBox.IDLE]],
-            ['forward-4',[[[522,2413,59,94],[29,81]],PushBox.IDLE]],
-            ['forward-5',[[[613,2414,57,96],[29,80]],PushBox.IDLE]],
-            ['forward-6',[[[688,2415,60,95],[30,81]],PushBox.IDLE]],
-            ['forward-7',[[[774,2413,66,96],[33,82]],PushBox.IDLE]],
-            ['forward-8',[[[868,2411,80,97],[40,84]],PushBox.IDLE]],
+            ['forward-1',[[[198,2411,82,99],[40,84]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-2',[[[305,2410,80,97],[41,83]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-3',[[[421,2412,66,97],[33,83]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-4',[[[522,2413,59,94],[29,81]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-5',[[[613,2414,57,96],[29,80]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-6',[[[688,2415,60,95],[30,81]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-7',[[[774,2413,66,96],[33,82]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-8',[[[868,2411,80,97],[40,84]],PushBox.IDLE,HurtBoxNinja.IDLE]],
 
             //Jump Up
             ['jump-up-1',[[[103,2681,54,117],[17,106]],PushBox.JUMP]],
@@ -42,6 +42,18 @@ export class Ninja extends Fighter{
             ['crouch-1', [[[1126,122,65,86],[33,75]],PushBox.IDLE]],
             ['crouch-2', [[[843,139,59,70],[30,60]],PushBox.BEND]],
             ['crouch-3',[[[919,141,71,67],[35,57]],PushBox.CROUCH]],
+
+            //Slash
+            ['slash-1',[[[79,412,96,88],[49,88]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
+            ['slash-2',[[[205,410,143,88],[41,88]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
+            ['slash-3',[[[362,406,152,91],[42,91]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
+            ['slash-4',[[[531,403,130,92],[35,91]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
+            ['slash-5',[[[679,405,95,90],[19,90]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
+            ['slash-6',[[[811,404,97,90],[50,89]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
+
+            //Kick
+            ['kick-1',[[[360,12867,75,99],[26,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['kick-2',[[[455,12863,98,102],[38,92]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,36,14]]]
 
         ]);
 
@@ -82,6 +94,16 @@ export class Ninja extends Fighter{
             [
                 ['crouch-3',60],['crouch-2',60],['crouch-1',-2]
              ],
+
+            [FighterState.SLASH]:
+             [
+                ['slash-1',60],['slash-2',60],['slash-3',260],['slash-4',60],['slash-5',60],['slash-6',-2],
+             ],
+
+            [FighterState.KICK]:
+            [
+                ['kick-1',260],['kick-2',260],['kick-1',-2]
+            ] 
         };
 
         // this.initialVelocity ={

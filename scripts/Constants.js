@@ -18,6 +18,8 @@ export const FighterState={
     CROUCH_DOWN:'crouchDown',
     CROUCH:'crouch',
     CROUCH_UP:'crouchUp',
+    SLASH:'slash',
+    KICK:'kick',
 };
 
 export const PushBox ={
@@ -28,3 +30,17 @@ export const PushBox ={
 }
 
 export const PUSH_FRICTION=60;
+
+export const HurtBoxTurtle ={
+    IDLE:[[-10,-74,24,20],[-26,-54,40,22],[-24,-31,40,32]],//position calculated from origin
+    KICK:[]
+}
+export const HurtBoxNinja ={
+    IDLE:[[-8,-86,24,14],[-18,-72,40,40],[-20,-31,40,32]],//position calculated from origin
+    KICK:[]  
+}
+
+export const FighterAttackType ={
+    SLASH:'slash',
+    KICK:'kick',
+}

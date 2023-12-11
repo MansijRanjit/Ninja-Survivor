@@ -4,6 +4,8 @@ export const Control={
     RIGHT: 'right',
     UP:'up',
     DOWN:'down',
+    SLASH:'slash',
+    KICK:'kick',
 };
 
 export const controls=[
@@ -13,6 +15,8 @@ export const controls=[
             [Control.RIGHT]:'KeyD',
             [Control.UP]:'KeyW',
             [Control.DOWN]:'KeyS',
+            [Control.SLASH]:'KeyR',
+            [Control.KICK]:'KeyT',
         }     
     },
     {
@@ -21,6 +25,8 @@ export const controls=[
             [Control.RIGHT]:'ArrowRight',
             [Control.UP]:'ArrowUp',
             [Control.DOWN]:'ArrowDown',
+            [Control.SLASH]:'Slash',
+            [Control.KICK]:'Period',
         },
     }
 ]
