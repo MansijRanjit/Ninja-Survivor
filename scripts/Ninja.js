@@ -53,7 +53,7 @@ export class Ninja extends Fighter{
 
             //Kick
             ['kick-1',[[[360,12867,75,99],[26,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['kick-2',[[[455,12863,98,102],[38,92]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,36,14]]]
+            ['kick-2',[[[455,12863,98,102],[38,92]],PushBox.IDLE,HurtBoxNinja.IDLE,[17,-85,30,14]]] // 
 
         ]);
 

@@ -44,8 +44,8 @@ export class enemy1 extends Fighter{
         
  
              //Kick
-             ['kick-1',[[[1,319,74,82],[27,82]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,30,14]]],
-             ['kick-2',[[[89,309,97,96],[38,86]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,30,14]]],
+             ['kick-1',[[[1,319,74,82],[27,82]],PushBox.IDLE, HurtBoxTurtle.IDLE]],
+             ['kick-2',[[[89,309,97,96],[38,86]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,20,14]]],//[17,-69,30,14]
         ]);
 
         this.animations ={

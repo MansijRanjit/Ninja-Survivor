@@ -44,3 +44,22 @@ export const FighterAttackType ={
     SLASH:'slash',
     KICK:'kick',
 }
+
+
+export const FighterId ={
+    NINJA:'Ninja',
+    TURTLE:'Turtle'
+}
+
+export const HEALTH_MAX_HIT_POINTS=144;
+export const HEALTH_COLOR='#F3F300'; //remaining health -yellow color
+export const HEALTH_DAMAGE_COLOR='#F30000';//damage points -red color
+
+export const FighterAttackBaseData ={
+    [FighterAttackType.SLASH]:{
+        damage:20
+    },
+    [FighterAttackType.KICK]:{
+        damage:10
+    }
+}

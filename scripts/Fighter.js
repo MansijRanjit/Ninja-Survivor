@@ -1,7 +1,8 @@
-import { FighterAttackType, FighterDirection, FighterState, PUSH_FRICTION } from "./Constants.js";
+import { FighterAttackBaseData, FighterAttackType, FighterDirection, FighterState, PUSH_FRICTION } from "./Constants.js";
 import * as inputKey from "./InputKeys.js";
 import { Control } from "./KeysControl.js";
 import { boxOverlap, getActualBoxDimensions, rectCollision } from "./collisions.js";
+import { gameState } from "./state/gameState.js";
 
 export class Fighter{
     constructor(name,x,y,direction,playerId){
@@ -29,6 +30,7 @@ export class Fighter{
         };
         this.gravity=1000;
         this.currentState=FighterState.IDLE;//self
+        this.attackStruck=false;
 
         this.opponent;
         this.boxes ={
@@ -110,7 +112,7 @@ export class Fighter{
         return this.animations[this.currentState][this.animationFrame][1] === -2
     }
 
-    //Calling rectCollision to check collision and returns bool value
+    //Calling rectCollision in collision.js to check collision  and returns bool value
     hasCollidedWithOpponent =() => rectCollision(
         this.position.x+this.boxes.push.x,
         this.position.y+ this.boxes.push.y,
@@ -133,7 +135,7 @@ export class Fighter{
         return this.direction;
     }
     
-    //returns push box coordinates
+    //returns push/hurt/hit box coordinates
     getBoxes(frameKey){
         const [,
             [x=0,y=0,width=0,height=0]=[],
@@ -161,6 +163,7 @@ export class Fighter{
 
     handleIdleInit(){
         this.resetVelocities();
+        this.attackStruck=false;
     }
     handleMoveInit(){
         this.velocity.x =this.initialVelocity.x[this.currentState] ?? 0;// returns 0 when the left-hand operand is null or undefined. If the initial velocity for the current state is not defined, it will default to 0
@@ -213,6 +216,12 @@ export class Fighter{
         else if(inputKey.isDown(this.playerId)) {
             this.changeState(FighterState.CROUCH_DOWN);
         }
+        else if(inputKey.isSlash(this.playerId)){
+            this.changeState(FighterState.SLASH);
+        }
+        else if(inputKey.isKick(this.playerId)){
+            this.changeState(FighterState.KICK);
+        }
     }
 
     handleWalkBackwardState(){
@@ -224,6 +233,12 @@ export class Fighter{
         }
         else if(inputKey.isDown(this.playerId)) {
             this.changeState(FighterState.CROUCH_DOWN);
+        }
+        else if(inputKey.isSlash(this.playerId)){
+            this.changeState(FighterState.SLASH);
+        }
+        else if(inputKey.isKick(this.playerId)){
+            this.changeState(FighterState.KICK);
         }
     }
 
@@ -315,30 +330,30 @@ export class Fighter{
     }
 
     updateAttackBoxCollided(time){
-        if(!this.states[this.currentState].attackType) return;//if box is not attack returns
+        if(!this.states[this.currentState].attackType || this.attackStruck) return;//if box is not attack,then returns
 
         const actualHitBox= getActualBoxDimensions(this.position,this.direction,this.boxes.hit);
-        //boxes .hit ko index change garnu paryo to x ,y,width ,height
-        //console.log(this.boxes.hit);
-        //enemy kick attak not collision detected
 
         for(const hurt of this.opponent.boxes.hurt){
             const [x,y,width,height] =hurt;
-            const actualOpponentsHurtBox = getActualBoxDimensions(this.opponent.position,
-            this.opponent.direction,
-            {x,y,width,height}
+            const actualOpponentsHurtBox = getActualBoxDimensions(
+                this.opponent.position,
+                this.opponent.direction,
+                {x,y,width,height}
             );
-/////////////////////////
-            //console.log(actualHitBox);
-            //console.log(actualOpponentsHurtBox);
-            if(!boxOverlap(actualHitBox, actualOpponentsHurtBox)) return;
 
-            console.log("cool");
+            if(boxOverlap(actualHitBox, actualOpponentsHurtBox)) {
+                const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
 
-            const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
+                const attack=this.states[this.currentState].attackType;
 
-            console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`)
+                gameState.fighters[this.opponent.playerId].hitPoints -=FighterAttackBaseData[attack].damage;
 
+                console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
+
+                this.attackStruck=true;
+                return;
+            }
         }
     }
 
@@ -402,7 +417,6 @@ export class Fighter{
         //console.log(boxes)
         this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
         
-
         //Origin
         context.beginPath();
         context.strokeStyle="white";

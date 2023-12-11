@@ -1,3 +1,6 @@
+import { HEALTH_DAMAGE_COLOR, HEALTH_MAX_HIT_POINTS } from "../Constants.js";
+import { gameState } from "../state/gameState.js";
+
 export class StatusBar{
     constructor(fighters){
         this.image= document.querySelector('img[alt="miscellaneous"]');
@@ -6,6 +9,13 @@ export class StatusBar{
         this.timeTimer=0;
         this.fighters=fighters;
 
+        this.healthBars=[{
+            timer:0,
+            hitPoints:HEALTH_MAX_HIT_POINTS,
+        }, {
+            timer:0,
+            hitPoints:HEALTH_MAX_HIT_POINTS,
+        }]
         this.frames=new Map([
             ['health-bar',[17,19,144,9]],
 
@@ -22,6 +32,25 @@ export class StatusBar{
         ])
     }
 
+    updateHealthBars(time){
+        for (const index in this.healthBars){
+            if(this.healthBars[index].hitPoints <= gameState.fighters[index].hitPoints) continue;
+            //reduce healthBars until it becomeless or equal to  fighter hitpoints
+            this.healthBars[index].hitPoints = Math.max(0, this.healthBars[index].hitPoints - (time.secPassed*90))
+        }
+    }
+
+    update(frameTime){
+        //Update Time
+        if(frameTime.prevTime > this.timeTimer+600){
+            if(this.time >0) this.time -=1;
+            this.timeTimer=frameTime.prevTime;
+        }
+
+        //Update Health bars
+        this.updateHealthBars(frameTime);
+    }
+    
     drawFrame(context,frameKey,x,y,direction=1){
         const [sourceX,sourceY,sourceWidth,sourceHeight]= this.frames.get(frameKey);
 
@@ -38,19 +67,26 @@ export class StatusBar{
             sourceHeight
         )
         context.setTransform(1,0,0,1,0,0);
-
     }
+    drawHealthBar(context){
+        this.drawFrame(context,'health-bar',31,20,1);//left health bar
+        this.drawFrame(context,'health-bar',353,20,-1);//right health bar
 
-    update(frameTime){
-        if(frameTime.prevTime > this.timeTimer+600){
-            if(this.time >0) this.time -=1;
-            this.timeTimer=frameTime.prevTime;
-        }
+        context.fillStyle= HEALTH_DAMAGE_COLOR;
+        context.beginPath();
+        context.fillRect(
+            31,20,
+            HEALTH_MAX_HIT_POINTS-Math.floor(this.healthBars[0].hitPoints),
+            9
+        );
+        context.fillRect(
+            209+Math.floor(this.healthBars[1].hitPoints),20,
+            HEALTH_MAX_HIT_POINTS-Math.floor(this.healthBars[1].hitPoints),
+            9
+        );
     }
-
     draw(context){
-        this.drawFrame(context,'health-bar',31,20,1);
-        this.drawFrame(context,'health-bar',353,20,-1);
+        this.drawHealthBar(context);
 
         const timeString = String(this.time).padStart(2,'00');
 
