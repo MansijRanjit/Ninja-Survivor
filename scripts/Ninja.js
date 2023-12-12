@@ -53,7 +53,10 @@ export class Ninja extends Fighter{
 
             //Kick
             ['kick-1',[[[360,12867,75,99],[26,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['kick-2',[[[455,12863,98,102],[38,92]],PushBox.IDLE,HurtBoxNinja.IDLE,[17,-85,30,14]]] // 
+            ['kick-2',[[[455,12863,98,102],[38,92]],PushBox.IDLE,HurtBoxNinja.IDLE,[17,-85,30,14]]],
+            
+            //HHurt
+            ['hurt-1',[[[213,3094,88,89],[52,86]],PushBox.IDLE,HurtBoxNinja.IDLE]]
 
         ]);
 
@@ -103,12 +106,16 @@ export class Ninja extends Fighter{
             [FighterState.KICK]:
             [
                 ['kick-1',260],['kick-2',260],['kick-1',-2]
-            ] 
+            ], 
+
+            [FighterState.HURT]:[
+                ['hurt-1',500],['hurt-1',-2]
+            ]
         };
 
         // this.initialVelocity ={
         //     jump: -10
         // }
-
     }
+
 }

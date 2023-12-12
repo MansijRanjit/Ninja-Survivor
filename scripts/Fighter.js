@@ -42,7 +42,7 @@ export class Fighter{
             [FighterState.IDLE]:{
                 init: this.handleIdleInit.bind(this),
                 update: this.handleIdleState.bind(this),
-                validFrom:[ FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD,FighterState.CROUCH_UP,FighterState.SLASH,FighterState.KICK]
+                validFrom:[ FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD,FighterState.CROUCH_UP,FighterState.SLASH,FighterState.KICK,FighterState.HURT]
             },
             [FighterState.WALK_FORWARD]:{
                 init: this.handleMoveInit.bind(this),
@@ -95,10 +95,15 @@ export class Fighter{
                 init: this.handleKickInit.bind(this),
                 update: this.handleKickState.bind(this),
                 validFrom:[FighterState.IDLE,FighterState.WALK_BACKWARD,FighterState.WALK_FORWARD]
+            },
+            [FighterState.HURT]:{
+                init:this.handleHurtInit.bind(this),
+                update:this.handleHurtState.bind(this),
+                validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
             }
         }
 
-        this.changeState(FighterState.IDLE);
+       // this.changeState(FighterState.IDLE);
     }
 
     //Resets Velocities
@@ -182,6 +187,9 @@ export class Fighter{
         this.resetVelocities();
     }
     handleKickInit(){
+        this.resetVelocities();
+    }
+    handleHurtInit(){
         this.resetVelocities();
     }
 
@@ -272,6 +280,10 @@ export class Fighter{
         if(!this.isAnimationCompleted())return;
         this.changeState(FighterState.IDLE);
     }
+    handleHurtState(){
+        if(!this.isAnimationCompleted())return;
+        this.changeState(FighterState.IDLE);
+    }
 
     updateLevelConstraints(time,context){
         //Preventing players to move outside canvas
@@ -347,6 +359,8 @@ export class Fighter{
 
                 const attack=this.states[this.currentState].attackType;
 
+                this.opponent.changeState(FighterState.HURT)
+
                 gameState.fighters[this.opponent.playerId].hitPoints -=FighterAttackBaseData[attack].damage;
 
                 console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
@@ -405,17 +419,16 @@ export class Fighter{
 
         context.lineWidth=1;
 
-        //Push Box
-        this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
+        ////Push Box
+        //this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
 
-        //Hurt Box
-        for (const hurtBox of boxes.hurt){
-            this.drawDebugBox(context,hurtBox,'#7777FF');
-        }
+        ////Hurt Box
+        // for (const hurtBox of boxes.hurt){
+        //     this.drawDebugBox(context,hurtBox,'#7777FF');
+        // }
 
-        //Hit Box
-        //console.log(boxes)
-        this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
+        ////Hit Box
+        //this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
         
         //Origin
         context.beginPath();

@@ -38,14 +38,17 @@ export class enemy1 extends Fighter{
             ['crouch-3',[[[181,427,56,67],[28,57]],PushBox.CROUCH]],
 
              //Slash
-             ['slash-1',[[[75,222,80,78],[38,78]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
-             ['slash-2',[[[185,214,67,82],[32,82]],PushBox.IDLE,HurtBoxTurtle.IDLE,[17,-85,40,14]]],
-             ['slash-3',[[[266,227,86,65],[43,85]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
+             ['slash-1',[[[75,222,80,78],[38,90]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
+             ['slash-2',[[[185,214,67,82],[32,90]],PushBox.IDLE,HurtBoxTurtle.IDLE,[17,-85,40,14]]],
+             ['slash-3',[[[266,227,86,65],[43,90]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
         
  
              //Kick
-             ['kick-1',[[[1,319,74,82],[27,82]],PushBox.IDLE, HurtBoxTurtle.IDLE]],
-             ['kick-2',[[[89,309,97,96],[38,86]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,20,14]]],//[17,-69,30,14]
+             ['kick-1',[[[1,319,74,82],[27,90]],PushBox.IDLE, HurtBoxTurtle.IDLE]],
+             ['kick-2',[[[89,309,97,96],[38,90]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,20,14]]],//[17,-69,30,14]
+
+             //Hurt
+             ['hurt-1',[[[453,1216,58,74],[29,84]],PushBox.IDLE,HurtBoxTurtle.IDLE]]
         ]);
 
         this.animations ={
@@ -88,13 +91,17 @@ export class enemy1 extends Fighter{
 
             [FighterState.SLASH]:
              [
-                ['slash-1',260],['slash-2',260],['slash-3',260],['slash-2',260],['slash-1',-2]
+                ['slash-1',60],['slash-2',60],['slash-3',260],['slash-2',260],['slash-1',-2]
              ],
 
             [FighterState.KICK]:
             [
                 ['kick-1',260],['kick-2',260],['kick-1',-2]
             ], 
+
+            [FighterState.HURT]:[
+                ['hurt-1',500],['hurt-1',-2]
+            ]
 
         };
 
@@ -104,10 +111,8 @@ export class enemy1 extends Fighter{
         
         // console.log(this.initialVelocity.jump)
         // console.log(this.velocity.y)
-
+        
     }
-
-    
 }
 
 
