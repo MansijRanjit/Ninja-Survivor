@@ -7,16 +7,30 @@
     <title>Ninja Survivor</title>
 </head>
 <body>
+    <!-- Menu -->
     <div id="menu-container">
         <h1>Ninja Survivor</h1>
         <button id="multiplayerStart-button">Start Game [Multiplayer]</button>
         <button id="vsComputerStart-button">Start Game [vs Computer]</button>
     </div>
+
+    <!-- Game end and restart -->
+    <div class="game-over-container" style="display: none;">
+        <img src="assets/images/blue-ninja.png" alt="ninja">
+        <img src="assets/images/enemy1.png" alt="turtle">
+        <h1 id="winner-display" ></h1>
+        <button id="play-again-button">Play Again</button>
+        <button id="return-to-menu-button">Return to Menu</button>
+    </div>
+
+    <!-- Canvas -->
     <canvas></canvas>
     <img src="assets/images/blue-ninjaFull.png" alt="blueNinja">
     <img src="assets/images/backgroundCartoon.png" alt="background">
     <img src="assets/images/miscellaneous.png" alt="miscellaneous">
-   <img src="assets/images/turtleFull.png" alt="enemy1">
+    <img src="assets/images/turtleFull.png" alt="enemy1">
+
+   
     <script type="module" src="scripts/script.js"></script>
 </body>
 </html>

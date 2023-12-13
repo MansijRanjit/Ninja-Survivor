@@ -10,10 +10,10 @@ export class StatusBar{
         this.fighters=fighters;
 
         this.healthBars=[{
-            timer:0,
+            //timer:0,
             hitPoints:HEALTH_MAX_HIT_POINTS,
         }, {
-            timer:0,
+           // timer:0,
             hitPoints:HEALTH_MAX_HIT_POINTS,
         }]
         this.frames=new Map([

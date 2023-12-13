@@ -3,29 +3,32 @@ import { enemy1 } from "../Enemy.js";
 import { Level1 } from "../Level1.js";
 import { FighterDirection,GameView } from "../Constants.js";
 import { StatusBar } from "../overlays/StatusBar.js";
+import { gameState } from "../state/gameState.js";
 
 export class BattleScene{
     fighters=[];
     entities=[];
+    isEnded=false;
 
     constructor(){
         this.stage= new Level1();
 
-        this.fighters=this.getFighterEntities();
+        this.fighters=this.getFighters();
 
         this.statusBar= new StatusBar(this.fighters);
 
         this.fighters[0].opponent=this.fighters[1];
         this.fighters[1].opponent=this.fighters[0];
 
+        this.timer=0;
     }
 
-    getFighterEntities(){
-        const fighterEntities=[
+    getFighters(){
+        const fighters=[
             new Ninja(90,220,FighterDirection.RIGHT,0,this.addEntity.bind(this)),
             new enemy1(190,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
         ]
-        return fighterEntities;
+        return fighters;
     }
 
     //special move is pushed/included in entities
@@ -37,9 +40,9 @@ export class BattleScene{
         this.entities = this.entities.filter((thisEntity) => thisEntity !==entity);// keeping only those entities that are not equal to the specified entity i.e.removing the specified entity from the array.
     }
 
-    updateFighters(time,context){
+    updateFighters(time,context,timer){
         for(const fighter of this.fighters){
-            fighter.update(time,context)
+            fighter.update(time,context,timer)
         }
     }
     updateStatusBar(time){
@@ -49,14 +52,19 @@ export class BattleScene{
         for (const entity of this.entities){
             entity.update(time,context)
         }
-
     }
     update(time,context){
-        this.updateFighters(time,context);
+        this.timer=this.statusBar.time;
+        this.updateFighters(time,context,this.timer);
         this.updateStatusBar(time);
         this.updateEntities(time,context);
-    }
+        //console.log(this.statusBar.time)
+        //console.log(this.timer)
 
+        if(this.timer<=0 || gameState.fighters[0].hitPoints<=0 || gameState.fighters[1].hitPoints<=0){
+            this.isEnded=true;
+        }
+    }
 
     drawFighters(context){
         for(const fighter of this.fighters){
@@ -77,4 +85,5 @@ export class BattleScene{
         this.drawStatusBar(context);
         this.drawEntities(context);
     }
+
 }

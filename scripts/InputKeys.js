@@ -1,14 +1,14 @@
 import { FighterDirection } from "./Constants.js";
 import { Control, controls } from "./KeysControl.js";
 
-const heldKeys= new Set();//store key codes that are currently being held down
-const pressedKeys = new Set();
+export const heldKeys= new Set();//store key codes that are currently being held down
+export const pressedKeys = new Set();
 
 function handleKeyDown(event){
     event.preventDefault();//prevent default behaviour assssociated with the keydown event
     heldKeys.add(event.code);//adds the key code of the pressed key to the heldKeys Set
 
-    console.log(heldKeys)
+    //console.log(heldKeys)
 }
 function handleKeyUp(event){
     event.preventDefault();
@@ -44,7 +44,6 @@ export const isForward =(id,direction) => direction === FighterDirection.RIGHT? 
 export const isBackward =(id,direction) => direction === FighterDirection.LEFT? isRight(id):isLeft(id);
 
 //Attacks
-//export const isControlDown =(id,control) => isKeyDown(controls[id].keyboard[control]);
 export const isControlPressed =(id,control) => isKeyPressed(controls[id].keyboard[control]);
 
 export const isSlash =(id) => isControlPressed(id,Control.SLASH);

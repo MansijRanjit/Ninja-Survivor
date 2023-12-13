@@ -13,6 +13,7 @@ export class Fighter{
         this.direction=direction;
         this.velocity={x:0, y:0};
 
+        ///////////this.image.onload=
         this.playerId=playerId;
 
         this.frames=new Map();
@@ -162,8 +163,8 @@ export class Fighter{
     changeState(newState){
         if(newState == this.currentState || !this.states[newState].validFrom.includes(this.currentState)) return;
 
-        console.log(this.currentState)
-        console.log(newState)
+       // console.log(this.currentState)
+       // console.log(newState)
         this.currentState=newState;
         this.animationFrame=0;
 
@@ -365,8 +366,12 @@ export class Fighter{
                 const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
 
                 const attack=this.states[this.currentState].attackType;
-                this.updateHealth(attack);
-                
+
+                if(gameState.fighters[this.opponent.playerId].hitPoints >0 && gameState.fighters[this.playerId].hitPoints >0){
+                    //console.log("cool")
+                    this.updateHealth(attack);
+                }
+
                 console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
 
                 this.attackStruck=true;
@@ -376,18 +381,12 @@ export class Fighter{
     }
 
     updateHealth(attack){
-        ///////////////////////        
-        if(StatusBar.time===0 ||gameState.fighters[this.opponent.playerId].hitPoints <=0 ||gameState.fighters[this.playerId].hitPoints <=0){
-            console.log("game over")
-        }
-        else{
             this.opponent.changeState(FighterState.HURT)//change opponent state to hurt if attack connects
 
             gameState.fighters[this.opponent.playerId].hitPoints -=FighterAttackBaseData[attack].damage;
-        }
     }
 
-    update(time, context){
+    update(time, context,timer){
         this.position.x += (this.velocity.x * this.direction) *time.secPassed;
         this.position.y += this.velocity.y *time.secPassed;
 
@@ -402,6 +401,9 @@ export class Fighter{
         this.updateAnimation(time);
         this.updateLevelConstraints(time,context);
         this.updateAttackBoxCollided(time);
+        /////////////////////
+        this.timer=timer;
+    
     }
 
     //drawing boxes
@@ -436,15 +438,15 @@ export class Fighter{
         context.lineWidth=1;
 
         //Push Box
-        this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
+        //this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
 
         //Hurt Box
-        for (const hurtBox of boxes.hurt){
-            this.drawDebugBox(context,hurtBox,'#7777FF');
-        }
+        // for (const hurtBox of boxes.hurt){
+        //     this.drawDebugBox(context,hurtBox,'#7777FF');
+        // }
 
         //Hit Box
-        this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
+        //this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
         
         //Origin
         context.beginPath();
@@ -465,7 +467,7 @@ export class Fighter{
 
         context.scale(this.direction,1);
         
-        //Drawing different size images for different statese
+        //Drawing different size images for different states
         if(this.currentState==FighterState.JUMP_FORWARD || this.currentState== FighterState.JUMP_BACKWARD){
             context.drawImage(
                 this.image,

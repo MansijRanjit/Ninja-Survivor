@@ -146,6 +146,7 @@ export class Ninja extends Fighter{
         if(!this.ninjaStar.fired && this.animationFrame ===2){
             this.ninjaStar.fired = true;
             this.addEntity(NinjaStar,time,this,this.ninjaStar.strength);
+           // console.log('ok')
         }
 
         if(!this.isAnimationCompleted())return;
