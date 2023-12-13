@@ -2,6 +2,7 @@ import { FighterAttackBaseData, FighterAttackType, FighterDirection, FighterStat
 import * as inputKey from "./InputKeys.js";
 import { Control } from "./KeysControl.js";
 import { boxOverlap, getActualBoxDimensions, rectCollision } from "./collisions.js";
+import { StatusBar } from "./overlays/StatusBar.js";
 import { gameState } from "./state/gameState.js";
 
 export class Fighter{
@@ -42,7 +43,7 @@ export class Fighter{
             [FighterState.IDLE]:{
                 init: this.handleIdleInit.bind(this),
                 update: this.handleIdleState.bind(this),
-                validFrom:[ FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD,FighterState.CROUCH_UP,FighterState.SLASH,FighterState.KICK,FighterState.HURT]
+                validFrom:[ FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD,FighterState.JUMP_UP,FighterState.JUMP_FORWARD,FighterState.JUMP_BACKWARD,FighterState.CROUCH_UP,FighterState.SLASH,FighterState.KICK,FighterState.HURT,FighterState.SPECIAL]
             },
             [FighterState.WALK_FORWARD]:{
                 init: this.handleMoveInit.bind(this),
@@ -100,10 +101,13 @@ export class Fighter{
                 init:this.handleHurtInit.bind(this),
                 update:this.handleHurtState.bind(this),
                 validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
-            }
+            },
+            [FighterState.HURT]:{
+                init:this.handleHurtInit.bind(this),
+                update:this.handleHurtState.bind(this),
+                validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
+            },
         }
-
-       // this.changeState(FighterState.IDLE);
     }
 
     //Resets Velocities
@@ -211,6 +215,9 @@ export class Fighter{
         }
         else if(inputKey.isKick(this.playerId)){
             this.changeState(FighterState.KICK);
+        }
+        else if(inputKey.isSpecial(this.playerId)){
+            this.changeState(FighterState.SPECIAL);
         }
     }
 
@@ -358,16 +365,25 @@ export class Fighter{
                 const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
 
                 const attack=this.states[this.currentState].attackType;
-
-                this.opponent.changeState(FighterState.HURT)
-
-                gameState.fighters[this.opponent.playerId].hitPoints -=FighterAttackBaseData[attack].damage;
-
+                this.updateHealth(attack);
+                
                 console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
 
                 this.attackStruck=true;
                 return;
             }
+        }
+    }
+
+    updateHealth(attack){
+        ///////////////////////        
+        if(StatusBar.time===0 ||gameState.fighters[this.opponent.playerId].hitPoints <=0 ||gameState.fighters[this.playerId].hitPoints <=0){
+            console.log("game over")
+        }
+        else{
+            this.opponent.changeState(FighterState.HURT)//change opponent state to hurt if attack connects
+
+            gameState.fighters[this.opponent.playerId].hitPoints -=FighterAttackBaseData[attack].damage;
         }
     }
 
@@ -419,16 +435,16 @@ export class Fighter{
 
         context.lineWidth=1;
 
-        ////Push Box
-        //this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
+        //Push Box
+        this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
 
-        ////Hurt Box
-        // for (const hurtBox of boxes.hurt){
-        //     this.drawDebugBox(context,hurtBox,'#7777FF');
-        // }
+        //Hurt Box
+        for (const hurtBox of boxes.hurt){
+            this.drawDebugBox(context,hurtBox,'#7777FF');
+        }
 
-        ////Hit Box
-        //this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
+        //Hit Box
+        this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
         
         //Origin
         context.beginPath();

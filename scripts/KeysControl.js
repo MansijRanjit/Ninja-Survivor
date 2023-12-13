@@ -6,6 +6,7 @@ export const Control={
     DOWN:'down',
     SLASH:'slash',
     KICK:'kick',
+    SPECIAL: 'special',
 };
 
 export const controls=[
@@ -17,6 +18,7 @@ export const controls=[
             [Control.DOWN]:'KeyS',
             [Control.SLASH]:'KeyR',
             [Control.KICK]:'KeyT',
+            [Control.SPECIAL]:'KeyY'
         }     
     },
     {
@@ -27,6 +29,7 @@ export const controls=[
             [Control.DOWN]:'ArrowDown',
             [Control.SLASH]:'Slash',
             [Control.KICK]:'Period',
+            [Control.SPECIAL]:'Comma'
         },
     }
 ]

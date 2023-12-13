@@ -20,7 +20,8 @@ export const FighterState={
     CROUCH_UP:'crouchUp',
     SLASH:'slash',
     KICK:'kick',
-    HURT:'hurt'
+    HURT:'hurt',
+    SPECIAL:'special',
 };
 
 export const PushBox ={
@@ -44,6 +45,7 @@ export const HurtBoxNinja ={
 export const FighterAttackType ={
     SLASH:'slash',
     KICK:'kick',
+    SPECIAL:'special'
 }
 
 
@@ -62,5 +64,19 @@ export const FighterAttackBaseData ={
     },
     [FighterAttackType.KICK]:{
         damage:10
+    },
+    [FighterAttackType.SPECIAL]:{
+        damage:30
     }
+}
+
+export const NinjaStarState={
+    ACTIVE: 'active',
+    COLLIDED: 'collided',
+}
+
+export const NinjaStarCollidedState ={
+    NONE:'none',
+    OPPONENT:'opponent',
+    NINJASTAR:'ninjaStar'
 }

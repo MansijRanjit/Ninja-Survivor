@@ -1,8 +1,10 @@
-import { FighterState, HurtBoxTurtle, PushBox } from "./Constants.js";
+import { FighterState, HurtBoxTurtle, PushBox,FighterAttackBaseData ,FighterAttackType} from "./Constants.js";
 import { Fighter } from "./Fighter.js";
+import { NinjaStar } from "./special/NinjaStar.js";
+
 
 export class enemy1 extends Fighter{
-    constructor(x,y,direction,playerId){
+    constructor(x,y,direction,playerId,addEntity){
         super('enemy1',x,y,direction,playerId);
 
         this.image= document.querySelector('img[alt="enemy1"]');
@@ -48,7 +50,12 @@ export class enemy1 extends Fighter{
              ['kick-2',[[[89,309,97,96],[38,90]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,20,14]]],//[17,-69,30,14]
 
              //Hurt
-             ['hurt-1',[[[453,1216,58,74],[29,84]],PushBox.IDLE,HurtBoxTurtle.IDLE]]
+             ['hurt-1',[[[453,1216,58,74],[29,84]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+
+             //Special Move
+            ['special-1',[[[158,902,76,98],[38,98]],PushBox.IDLE]],
+            ['special-2',[[[245,915,66,82],[32,88]],PushBox.IDLE]],
+            ['special-3',[[[325,942,68,54],[35,88]],PushBox.IDLE]], 
         ]);
 
         this.animations ={
@@ -101,6 +108,10 @@ export class enemy1 extends Fighter{
 
             [FighterState.HURT]:[
                 ['hurt-1',500],['hurt-1',-2]
+            ],
+
+            [FighterState.SPECIAL]:[
+                ['special-1',260],['special-2',260],['special-3',260],['special-2',-2],
             ]
 
         };
@@ -111,7 +122,30 @@ export class enemy1 extends Fighter{
         
         // console.log(this.initialVelocity.jump)
         // console.log(this.velocity.y)
+        //////////////////////
+        this.ninjaStar={fired:false, strength:FighterAttackBaseData[FighterAttackType.SPECIAL].damage}
         
+        this.addEntity=addEntity;
+
+        this.states[FighterState.SPECIAL]={
+            init: this.handleSpecialInit.bind(this),
+            update: this.handleSpecialState.bind(this),
+            validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
+        }
+        
+    }
+    handleSpecialInit(){
+        this.resetVelocities();
+        this.ninjaStar={fired:false, strength:FighterAttackBaseData[FighterAttackType.SPECIAL].damage}
+    }
+    handleSpecialState(time){
+        if(!this.ninjaStar.fired && this.animationFrame ===2){
+            this.ninjaStar.fired = true;
+            this.addEntity(NinjaStar,time,this,this.ninjaStar.strength);
+        }
+
+        if(!this.isAnimationCompleted())return;
+        this.changeState(FighterState.IDLE);
     }
 }
 

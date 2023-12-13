@@ -47,7 +47,7 @@ export class StatusBar{
             this.timeTimer=frameTime.prevTime;
         }
 
-        //Update Health bars
+        //Update Health bars display
         this.updateHealthBars(frameTime);
     }
     

@@ -49,3 +49,4 @@ export const isControlPressed =(id,control) => isKeyPressed(controls[id].keyboar
 
 export const isSlash =(id) => isControlPressed(id,Control.SLASH);
 export const isKick =(id) => isControlPressed(id,Control.KICK);
+export const isSpecial =(id) => isControlPressed(id,Control.SPECIAL)

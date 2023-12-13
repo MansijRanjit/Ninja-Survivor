@@ -14,51 +14,50 @@ window.addEventListener('load',function(){
     canvas.width=GameView.WIDTH;
     canvas.height=GameView.HEIGHT;
 
-    // const player =new Ninja(90,220,FighterDirection.RIGHT,0);
-    // const turtle=new enemy1(190,220,FighterDirection.LEFT,1);
-    // const level1= new Level1();
+     const menuContainer = document.getElementById('menu-container');
+    // const multiplayerStartButton = document.getElementById('multiplayerStart-button');
 
-    // this.fighters=[
-    //     player,turtle
-    // ]
-    // const statusBar= new StatusBar(this.fighters);
+    // const vsComputerStartButton = document.getElementById('vsComputerStart-button');
 
-    // //placing opponents for adjusting directions
-    // this.fighters[0].opponent =this.fighters[1];// player.opponent=turtle;
-    // this.fighters[1].opponent =this.fighters[0];// turtle.opponent=player;
+    // // Hide canvas and show menu initially
+    // canvas.style.display = 'none';
+    // menuContainer.style.display = 'flex';
+
+    // // Handle Start Game Multiplayer button click
+    // multiplayerStartButton.addEventListener('click', function () {
+    //     // Show canvas and hide menu on button click
+    //     canvas.style.display = 'block';
+    //     menuContainer.style.display = 'none';
+
+    //     // Start the game in multiplayer mode
+    //     startMultiplayerGame();
+    // });
+
+    menuContainer.style.display = 'none';
+    startMultiplayerGame();
+
+    function startMultiplayerGame(){
+        const scene=new BattleScene();
     
-    const scene=new BattleScene();
-
-    inputKeyboardEvents();
-
-    let frameTime={
-        prevTime: 0,
-        secPassed:0
-    }
-
-    function animate(time){
-        window.requestAnimationFrame(animate);
-
-        frameTime={
-            secPassed : (time - frameTime.prevTime) /1000,
-            prevTime : time
+        inputKeyboardEvents();
+    
+        let frameTime={
+            prevTime: 0,
+            secPassed:0
         }
-       // console.log(secPassed)
-
-        // player.update(frameTime,context);
-        // turtle.update(frameTime,context);
-
-        // level1.draw(context);
-        // player.draw(context);
-        // turtle.draw(context);
-
-        // statusBar.update(frameTime);
-        // statusBar.draw(context);
-
-        //console.log(time);
-
-        scene.update(frameTime,context);
-        scene.draw(context);
+    
+        function animate(time){
+            window.requestAnimationFrame(animate);
+    
+            frameTime={
+                secPassed : (time - frameTime.prevTime) /1000,
+                prevTime : time
+            }
+    
+            scene.update(frameTime,context);
+            scene.draw(context);
+        }
+        window.requestAnimationFrame(animate);
     }
-    window.requestAnimationFrame(animate);
+    
 });
