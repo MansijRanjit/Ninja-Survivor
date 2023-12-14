@@ -1,6 +1,6 @@
-import { FighterState, HurtBoxTurtle, PushBox,FighterAttackBaseData ,FighterAttackType} from "./Constants.js";
+import { FighterState, HurtBoxTurtle, PushBox,FighterAttackBaseData ,FighterAttackType} from "../Constants.js";
 import { Fighter } from "./Fighter.js";
-import { NinjaStar } from "./special/NinjaStar.js";
+import { NinjaStar } from "../special/NinjaStar.js";
 
 
 export class enemy1 extends Fighter{

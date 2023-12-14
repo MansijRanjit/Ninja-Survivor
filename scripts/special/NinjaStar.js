@@ -31,7 +31,7 @@ export class NinjaStar{
         this.direction = this.fighter.direction;
         this.position={
             x: this.fighter.position.x + (26 * this.direction),
-            y: this.fighter.position.y -37,
+            y: this.fighter.position.y -50,
         };
         this.animationTimer = time.prevTime;
     }
@@ -70,7 +70,7 @@ export class NinjaStar{
 
         this.state = NinjaStarState.COLLIDED;
         this.animationFrame=0;
-        this.animationTimer = time.prevTime + this.animations[this.state][this.animationFrame][1] * 60;
+        this.animationTimer = time.prevTime + this.animations[this.state][this.animationFrame][1] * 60;//Sets the animation timer based on the previous time, the animation frame duration, and a scaling factor (60)
 
         //Reduce opponents health on collision of star
         this.fighter.updateHealth(FighterAttackType.SPECIAL);

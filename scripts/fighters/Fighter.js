@@ -1,9 +1,9 @@
-import { FighterAttackBaseData, FighterAttackType, FighterDirection, FighterState, PUSH_FRICTION } from "./Constants.js";
-import * as inputKey from "./InputKeys.js";
-import { Control } from "./KeysControl.js";
-import { boxOverlap, getActualBoxDimensions, rectCollision } from "./collisions.js";
-import { StatusBar } from "./overlays/StatusBar.js";
-import { gameState } from "./state/gameState.js";
+import { FighterAttackBaseData, FighterAttackType, FighterDirection, FighterState, PUSH_FRICTION } from "../Constants.js";
+import * as inputKey from "../InputKeys.js";
+import { Control } from "../KeysControl.js";
+import { boxOverlap, getActualBoxDimensions, rectCollision } from "../collisions.js";
+import { StatusBar } from "../overlays/StatusBar.js";
+import { gameState } from "../state/gameState.js";
 
 export class Fighter{
     constructor(name,x,y,direction,playerId){
@@ -103,11 +103,11 @@ export class Fighter{
                 update:this.handleHurtState.bind(this),
                 validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
             },
-            [FighterState.HURT]:{
-                init:this.handleHurtInit.bind(this),
-                update:this.handleHurtState.bind(this),
-                validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
-            },
+            // [FighterState.HURT]:{
+            //     init:this.handleHurtInit.bind(this),
+            //     update:this.handleHurtState.bind(this),
+            //     validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
+            // },
         }
     }
 

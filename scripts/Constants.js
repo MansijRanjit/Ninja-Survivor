@@ -35,11 +35,9 @@ export const PUSH_FRICTION=60;
 
 export const HurtBoxTurtle ={
     IDLE:[[-10,-74,24,20],[-26,-54,40,22],[-24,-31,40,32]],//position calculated from origin
-    //KICK:[]
 }
 export const HurtBoxNinja ={
     IDLE:[[-8,-86,24,14],[-18,-72,40,40],[-20,-31,40,32]],//position calculated from origin
-   // KICK:[]  
 }
 
 export const FighterAttackType ={
@@ -60,13 +58,13 @@ export const HEALTH_DAMAGE_COLOR='#F30000';//damage points -red color
 
 export const FighterAttackBaseData ={
     [FighterAttackType.SLASH]:{
-        damage:20
-    },
-    [FighterAttackType.KICK]:{
         damage:10
     },
+    [FighterAttackType.KICK]:{
+        damage:5
+    },
     [FighterAttackType.SPECIAL]:{
-        damage:30
+        damage:15
     }
 }
 
@@ -75,8 +73,8 @@ export const NinjaStarState={
     COLLIDED: 'collided',
 }
 
-export const NinjaStarCollidedState ={
-    NONE:'none',
-    OPPONENT:'opponent',
-    NINJASTAR:'ninjaStar'
-}
+// export const NinjaStarCollidedState ={
+//     NONE:'none',
+//     OPPONENT:'opponent',
+//     NINJASTAR:'ninjaStar'
+// }

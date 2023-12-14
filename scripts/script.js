@@ -1,6 +1,8 @@
 import {  GameView, HEALTH_MAX_HIT_POINTS } from "./Constants.js";
 import { heldKeys, inputKeyboardEvents, pressedKeys } from "./InputKeys.js";
+import { Computer1 } from "./fighters/Computer1.js";
 import { BattleScene } from "./scenes/BattleScene.js";
+import { vsCompBattleScene } from "./scenes/vsCompBattleScene.js";
 import { gameState } from "./state/gameState.js";
 
 window.addEventListener("load", function () {
@@ -30,7 +32,22 @@ window.addEventListener("load", function () {
     multiplayerStartButton.addEventListener("click", 
     startMultiplayerGame);
 
+    // Handle Start Game:vsComputer button click
+    vsComputerStartButton.addEventListener("click", 
+    startvsComputerGame);
+
+    //Multiplayer Mode
     function startMultiplayerGame() {
+            alert(`Player 1 moves:             Player 2 moves:   
+        A :Move Left                     LeftArrow :Move Left
+        D :Move Right                  RightArrow :Move Right
+        W :Jump up                      UpArrow :Jump up
+        S :Crouch/Block                DownArrow :Crouch/Block
+        R :Slash                             / :Slash
+        T :Kick                               . :Kick
+        Y :Special Move               , :Special Move
+            `)
+        
         // Show canvas and hide menu on button click
         canvas.style.display = "block";
         menuContainer.style.display = "none";
@@ -67,16 +84,22 @@ window.addEventListener("load", function () {
         //After game over
         function gameEnd()
         {
+            const image1=document.querySelector('img[alt="ninja"]');
+            const image2=document.querySelector('img[alt="turtle"]');
+            image1.style.display="none";
+            image2.style.display="none";
+
             if (scene.timer <= 0) {
                 if (gameState.fighters[0].hitPoints > gameState.fighters[1].hitPoints) {
                     //scene.statusBar.time = 0;
                     winnerDisplay.textContent = `Player 1 wins`;
-                    drawPlayer1(context);
+                    drawPlayer(context,image1);
                 } 
                 else if (
                 gameState.fighters[1].hitPoints > gameState.fighters[0].hitPoints
                 ) {
                     winnerDisplay.textContent = `Player 2 wins`;
+                    drawPlayer(context,image2)
                 } 
                 else {
                     winnerDisplay.textContent = `Draw`;
@@ -84,10 +107,11 @@ window.addEventListener("load", function () {
             }
             if (gameState.fighters[0].hitPoints <= 0) {
                 winnerDisplay.textContent = `Player 2 wins`;
+                drawPlayer(context,image2);
             } 
             else if (gameState.fighters[1].hitPoints <= 0) {
                 winnerDisplay.textContent = `Player 1 wins`;
-               // drawPlayer1(context);
+                drawPlayer(context,image1);
             }
     
             // Hide the canvas
@@ -144,16 +168,51 @@ window.addEventListener("load", function () {
     
             //Set Game Ended false
             scene.isEnded=false;
+
         }  
-        // function drawPlayer1(context){
-        //     console.log("cool")
-        //     const image=document.querySelector('img[alt="ninja"]');
-        //     context.drawImage(
-        //         image,
-        //         90,20,
-        //         60,60
-        //     )
-        // }
+        function drawPlayer(context,image){
+            //console.log("cool")
+            image.style.display="block"
+        }
+    }
+
+
+    //vsComputer Mode
+    function startvsComputerGame(){
+        console.log("cool");
+        // Show canvas and hide menu on button click
+        canvas.style.display = "block";
+        menuContainer.style.display = "none";
+
+        const scene = new vsCompBattleScene();
+
+        inputKeyboardEvents();
+
+        let frameTime = {
+        prevTime: 0,
+        secPassed: 0,
+        };
+
+        let animationFrameId;
+
+        function animate(time) {
+            animationFrameId=window.requestAnimationFrame(animate);
+            frameTime = {
+                secPassed: (time - frameTime.prevTime) / 1000,
+                prevTime: time,
+            };
+
+            scene.draw(context);
+            scene.update(frameTime, context);
+
+            //console.log(scene.isEnded);
+            if(scene.isEnded){
+               // gameEnd();
+            }
+        }
+        window.requestAnimationFrame(animate);
+
+         
     }
      
    

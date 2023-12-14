@@ -9,7 +9,7 @@ body{
     display: flex;
 
     h1{
-        color: blue;
+        color: white;
     }
 
     #menu-container, .game-over-container{

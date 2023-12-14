@@ -1,7 +1,7 @@
-import { FighterAttackBaseData, FighterState, HurtBoxNinja, PushBox,FighterAttackType } from "./Constants.js";
+import { FighterAttackBaseData, FighterState, HurtBoxNinja, PushBox,FighterAttackType } from "../Constants.js";
 import { Fighter } from "./Fighter.js";
-import { NinjaStar } from "./special/NinjaStar.js";
-import { gameState } from "./state/gameState.js";
+import { NinjaStar } from "../special/NinjaStar.js";
+import { gameState } from "../state/gameState.js";
 
 export class Ninja extends Fighter{
     constructor(x,y,direction,playerId,addEntity){
