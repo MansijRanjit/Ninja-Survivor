@@ -58,13 +58,13 @@ export const HEALTH_DAMAGE_COLOR='#F30000';//damage points -red color
 
 export const FighterAttackBaseData ={
     [FighterAttackType.SLASH]:{
-        damage:10
-    },
-    [FighterAttackType.KICK]:{
         damage:5
     },
+    [FighterAttackType.KICK]:{
+        damage:2
+    },
     [FighterAttackType.SPECIAL]:{
-        damage:15
+        damage:5
     }
 }
 

@@ -1,5 +1,5 @@
 import { FighterAttackBaseData, FighterState, HurtBoxNinja, PushBox,FighterAttackType } from "../Constants.js";
-import { Fighter } from "./Fighter.js";
+import { Fighter } from "../fighters/Fighter.js";
 import { NinjaStar } from "../special/NinjaStar.js";
 import { gameState } from "../state/gameState.js";
 
@@ -46,7 +46,7 @@ export class Ninja extends Fighter{
             ['crouch-3',[[[919,141,71,67],[35,57]],PushBox.CROUCH]],
 
             //Slash
-            ['slash-1',[[[79,412,96,88],[49,88]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
+            ['slash-1',[[[79,412,96,88],[49,88]],PushBox.IDLE,HurtBoxNinja.IDLE]], //, [17,-85,40,14]
             ['slash-2',[[[205,410,143,88],[41,88]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
             ['slash-3',[[[362,406,152,91],[42,91]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
             ['slash-4',[[[531,403,130,92],[35,91]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
@@ -61,11 +61,11 @@ export class Ninja extends Fighter{
             ['hurt-1',[[[213,3094,88,89],[52,86]],PushBox.IDLE,HurtBoxNinja.IDLE]],
 
             //Special Move
-            ['special-1',[[[54,5742,72,92],[36,91]],PushBox.IDLE]],
-            ['special-2',[[[157,5743,63,87],[32,91]],PushBox.IDLE]],
-            ['special-3',[[[407,5766,68,70],[35,91]],PushBox.IDLE]], 
-            ['special-4',[[[500,5759,67,76],[34,91]],PushBox.IDLE]], 
-            ['special-5',[[[252,5763,99,69],[50,91]],PushBox.IDLE]],
+            ['special-1',[[[54,5742,72,92],[36,91]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['special-2',[[[157,5743,63,87],[32,91]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['special-3',[[[407,5766,68,70],[35,91]],PushBox.IDLE,HurtBoxNinja.IDLE]], 
+            ['special-4',[[[500,5759,67,76],[34,91]],PushBox.IDLE,HurtBoxNinja.IDLE]], 
+            ['special-5',[[[252,5763,99,69],[50,91]],PushBox.IDLE,HurtBoxNinja.IDLE]],
 
         ]);
 

@@ -13,7 +13,6 @@ export class Fighter{
         this.direction=direction;
         this.velocity={x:0, y:0};
 
-        ///////////this.image.onload=
         this.playerId=playerId;
 
         this.frames=new Map();
@@ -103,11 +102,6 @@ export class Fighter{
                 update:this.handleHurtState.bind(this),
                 validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
             },
-            // [FighterState.HURT]:{
-            //     init:this.handleHurtInit.bind(this),
-            //     update:this.handleHurtState.bind(this),
-            //     validFrom:[FighterState.IDLE,FighterState.WALK_FORWARD,FighterState.WALK_BACKWARD]
-            // },
         }
     }
 
@@ -298,10 +292,10 @@ export class Fighter{
         const [[[, , width]]]=this.frames.get(this.animations[this.currentState][this.animationFrame][0]);
 
         if(this.position.x + width/2 >= context.canvas.width){
-            this.position.x= context.canvas.width-width;
+            this.position.x= context.canvas.width-width/2;
         }
         if(this.position.x - width/2 <0){
-            this.position.x=width;
+            this.position.x=width/2;
         }
 
         //Prevent overlap on collision between fighters
@@ -368,11 +362,10 @@ export class Fighter{
                 const attack=this.states[this.currentState].attackType;
 
                 if(gameState.fighters[this.opponent.playerId].hitPoints >0 && gameState.fighters[this.playerId].hitPoints >0){
-                    //console.log("cool")
                     this.updateHealth(attack);
                 }
 
-                console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
+                // console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
 
                 this.attackStruck=true;
                 return;
@@ -438,15 +431,15 @@ export class Fighter{
         context.lineWidth=1;
 
         //Push Box
-        //this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
+        this.drawDebugBox(context,[boxes.push.x,boxes.push.y,boxes.push.width,boxes.push.height],'#55FF55');
 
         //Hurt Box
-        // for (const hurtBox of boxes.hurt){
-        //     this.drawDebugBox(context,hurtBox,'#7777FF');
-        // }
+        for (const hurtBox of boxes.hurt){
+            this.drawDebugBox(context,hurtBox,'#7777FF');
+        }
 
         //Hit Box
-        //this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
+        this.drawDebugBox(context,[boxes.hit.x,boxes.hit.y,boxes.hit.width,boxes.hit.height],'#FF0000');
         
         //Origin
         context.beginPath();
@@ -514,6 +507,6 @@ export class Fighter{
         }
         context.setTransform(1,0,0,1,0,0);
 
-        this.drawDebug(context);
+        //this.drawDebug(context);
     }
 }

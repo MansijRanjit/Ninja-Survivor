@@ -53,9 +53,9 @@ export class enemy1 extends Fighter{
              ['hurt-1',[[[453,1216,58,74],[29,84]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
 
              //Special Move
-            ['special-1',[[[158,902,76,98],[38,98]],PushBox.IDLE]],
-            ['special-2',[[[245,915,66,82],[32,88]],PushBox.IDLE]],
-            ['special-3',[[[325,942,68,54],[35,88]],PushBox.IDLE]], 
+            ['special-1',[[[158,902,76,98],[38,98]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['special-2',[[[245,915,66,82],[32,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['special-3',[[[325,942,68,54],[35,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]], 
         ]);
 
         this.animations ={

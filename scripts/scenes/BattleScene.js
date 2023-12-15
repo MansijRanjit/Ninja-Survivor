@@ -26,7 +26,7 @@ export class BattleScene{
     getFighters(){
         const fighters=[
             new Ninja(90,220,FighterDirection.RIGHT,0,this.addEntity.bind(this)),
-            new enemy1(190,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
+            new enemy1(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
         ]
         return fighters;
     }

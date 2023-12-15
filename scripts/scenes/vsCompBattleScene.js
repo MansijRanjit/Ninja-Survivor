@@ -26,7 +26,7 @@ export class vsCompBattleScene{
     getFighters(){
         const fighters=[
             new Ninja(90,220,FighterDirection.RIGHT,0,this.addEntity.bind(this)),
-            new Computer1(190,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
+            new Computer1(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
         ]
         return fighters;
     }
@@ -42,7 +42,7 @@ export class vsCompBattleScene{
 
     updateFighters(time,context,timer){
         for(const fighter of this.fighters){
-            fighter.update(time,context,timer)
+                fighter.update(time,context,timer)
         }
     }
     updateStatusBar(time){
@@ -68,7 +68,7 @@ export class vsCompBattleScene{
 
     drawFighters(context){
         for(const fighter of this.fighters){
-            fighter.draw(context)
+                fighter.draw(context) 
         }
     }
     drawStatusBar(context){

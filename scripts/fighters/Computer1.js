@@ -10,6 +10,10 @@ export class Computer1 extends Fighter{
 
         this.image= document.querySelector('img[alt="enemy1"]');
 
+        this.slashCount=0;
+        this.kickCount=0;
+        this.starCount=0;
+
         this.frames= new Map([
             //Idle
             ['idle-1',[[[61,3,68,86],[34,85]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
@@ -54,9 +58,9 @@ export class Computer1 extends Fighter{
              ['hurt-1',[[[453,1216,58,74],[29,84]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
 
              //Special Move
-            ['special-1',[[[158,902,76,98],[38,98]],PushBox.IDLE]],
-            ['special-2',[[[245,915,66,82],[32,88]],PushBox.IDLE]],
-            ['special-3',[[[325,942,68,54],[35,88]],PushBox.IDLE]], 
+            ['special-1',[[[158,902,76,98],[38,98]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['special-2',[[[245,915,66,82],[32,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['special-3',[[[325,942,68,54],[35,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]], 
         ]);
 
         this.animations ={
@@ -65,7 +69,7 @@ export class Computer1 extends Fighter{
             ],
 
             [FighterState.WALK_FORWARD]:[
-                ['forward-1',65],['forward-2',65],['forward-3',65],['forward-4',65],['forward-5',65],
+                ['forward-1',65],['forward-2',65],['forward-3',65],['forward-4',65],['forward-5',-2],
             ],
 
             [FighterState.WALK_BACKWARD]:[
@@ -73,7 +77,7 @@ export class Computer1 extends Fighter{
             ],
 
             [FighterState.JUMP_UP]: [
-                ['jump-up-1',200],['jump-up-2',200],['jump-up-3',200],['jump-up-4',-1]
+                ['jump-up-1',200],['jump-up-2',200],['jump-up-3',200],['jump-up-4',-2]
             ],
 
             [FighterState.JUMP_FORWARD]:[
@@ -86,15 +90,15 @@ export class Computer1 extends Fighter{
 
             [FighterState.CROUCH_DOWN]:
             [
-                ['crouch-1',60],['crouch-2',60],['crouch-3',-2]
+                ['crouch-1',1],['crouch-2',1],['crouch-3',-2]
             ],
 
             [FighterState.CROUCH]:
-            [['crouch-3',0]],
+            [['crouch-3',-2]],
 
             [FighterState.CROUCH_UP]:
             [
-                ['crouch-3',60],['crouch-2',60],['crouch-1',-2]
+                ['crouch-3',260],['crouch-2',260],['crouch-1',-2]
              ],
 
             [FighterState.SLASH]:
@@ -143,100 +147,78 @@ export class Computer1 extends Fighter{
         this.changeState(FighterState.IDLE);
     }
 
+    hitTimer=0;
     handleIdleState(){
-        if(inputKey.isUp(this.opponent.playerId)) {
-            this.changeState(FighterState.JUMP_UP);
-        }
-        else if(inputKey.isDown(this.playerId)) {
-            this.changeState(FighterState.CROUCH_DOWN);
-        }
-        else if(inputKey.isBackward(this.playerId,this.direction)){
-            this.changeState(FighterState.WALK_BACKWARD);   
-        } 
-        else if(inputKey.isForward(this.playerId,this.direction)) {
-            this.changeState(FighterState.WALK_FORWARD);
-        }
-        else if(inputKey.isSlash(this.playerId)){
-            this.changeState(FighterState.SLASH);
-        }
-        else if(inputKey.isKick(this.playerId)){
-            this.changeState(FighterState.KICK);
-        }
-        else if(inputKey.isSpecial(this.playerId)){
-            this.changeState(FighterState.SPECIAL);
-        }
-    }
+        
+            function getRandomAttackState(){
+                const attacks=[FighterAttackType.KICK,FighterAttackType.SLASH,FighterAttackType.SPECIAL];
 
+                const randomIndex=Math.floor(Math.random() * attacks.length)
+                return attacks[randomIndex]
+            }
+
+            if(inputKey.heldKeys.has("KeyR")){
+                // Increment slashCount only if the key was not pressed in the previous frame
+                if(!this.keyRPressed){
+                    this.slashCount++;
+                    //console.log(this.slashCount)
+                    //console.log(this.currentState)
+                    if(this.slashCount%3===0){
+                        this.changeState(FighterState.CROUCH_DOWN);
+                    }
+
+                    if(this.slashCount%2===0){
+                        this.changeState(getRandomAttackState());
+                    }
+                    this.keyRPressed=true;
+                }      
+            }
+            else{
+                this.keyRPressed=false
+            }
+            
+            
+            if(inputKey.heldKeys.has("KeyT")){
+                if(!this.keyTPressed){
+                    this.kickCount++;
+                    if(this.kickCount%2===0){ 
+                        this.changeState(FighterState.CROUCH_DOWN); 
+                    }
+                    if(this.kickCount%1===0){
+                        this.changeState(getRandomAttackState()); 
+                    }
+                }
+                this.keyTPressed=true
+            }
+            else{
+                this.keyTPressed=false
+            }
+
+            if(inputKey.heldKeys.has("KeyY")){
+                this.changeState(FighterState.JUMP_FORWARD);
+            }
+
+
+            setTimeout(() => {
+                if(Math.abs(this.position.x-this.opponent.position.x) >70 ){
+                    this.changeState(FighterState.WALK_FORWARD);           
+                }
+            },5000)
+
+            this.hitTimer++;
+            if(this.hitTimer%400===0){// && inputKey.heldKeys.size===0
+                if(Math.abs(this.position.x-this.opponent.position.x) <70 ){
+                    this.changeState(getRandomAttackState());
+                }
+            }
+
+
+    }
     handleWalkForwardState(){
-        if(!inputKey.isForward(this.playerId,this.direction)) {
-            this.changeState(FighterState.IDLE);
-        }
-        else if(inputKey.isUp(this.playerId)) {
-            this.changeState(FighterState.JUMP_FORWARD);
-        }
-        else if(inputKey.isDown(this.playerId)) {
-            this.changeState(FighterState.CROUCH_DOWN);
-        }
-        else if(inputKey.isSlash(this.playerId)){
-            this.changeState(FighterState.SLASH);
-        }
-        else if(inputKey.isKick(this.playerId)){
-            this.changeState(FighterState.KICK);
-        }
-    }
-
-    handleWalkBackwardState(){
-        if(!inputKey.isBackward(this.playerId,this.direction)) {
-            this.changeState(FighterState.IDLE);
-        }
-        else if(inputKey.isUp(this.playerId)) {
-            this.changeState(FighterState.JUMP_BACKWARD);
-        }
-        else if(inputKey.isDown(this.playerId)) {
-            this.changeState(FighterState.CROUCH_DOWN);
-        }
-        else if(inputKey.isSlash(this.playerId)){
-            this.changeState(FighterState.SLASH);
-        }
-        else if(inputKey.isKick(this.playerId)){
-            this.changeState(FighterState.KICK);
-        }
-    }
-
-    handleJumpState(time){
-        this.velocity.y += this.gravity * time.secPassed;
-
-        if(this.position.y > 220){//floor position=220
-            this.position.y=220,
-            this.changeState(FighterState.IDLE);
-        }
-    }
-
-    handleCrouchState(){
-        if(!inputKey.isDown(this.playerId)) this.changeState(FighterState.CROUCH_UP);
-    }
-    handleCrouchDownState(){
-        if(this.isAnimationCompleted()){
-            this.changeState(FighterState.CROUCH);
-        }
-    }
-    handleCrouchUpState(){
-        if(this.isAnimationCompleted()){
-            this.changeState(FighterState.IDLE);
-        }
-    }
-    handleSlashState(){
-        if(!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.IDLE);
-    }
-    handleKickState(){
         if(!this.isAnimationCompleted())return;
         this.changeState(FighterState.IDLE);
     }
-    handleHurtState(){
-        if(!this.isAnimationCompleted())return;
-        this.changeState(FighterState.IDLE);
-    }
+
 
 }
 
