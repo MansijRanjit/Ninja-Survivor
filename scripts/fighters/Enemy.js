@@ -36,7 +36,7 @@ export class enemy1 extends Fighter{
 
             //Crouch
             ['crouch-1', [[[22,418,66,76],[33,65]],PushBox.IDLE]],
-            ['crouch-2',[[[103,424,67,69],[34,58]],PushBox.BEND]],
+            ['crouch-2',[[[103,424,67,69],[34,58]],PushBox.CROUCH]],
             ['crouch-3',[[[181,427,56,67],[28,57]],PushBox.CROUCH]],
 
              //Slash

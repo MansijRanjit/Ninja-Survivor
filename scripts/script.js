@@ -1,6 +1,7 @@
 import { GameView, HEALTH_MAX_HIT_POINTS } from "./Constants.js";
 import { heldKeys, inputKeyboardEvents, pressedKeys } from "./InputKeys.js";
-import { Computer1 } from "./fighters/Computer1.js";
+import { Computer2 } from "./fighters/Computer2.js";
+import { FighterDirection } from "./Constants.js";
 import { BattleScene } from "./scenes/BattleScene.js";
 import { vsCompBattleScene } from "./scenes/vsCompBattleScene.js";
 import { gameState } from "./state/gameState.js";
@@ -78,6 +79,7 @@ window.addEventListener("load", function () {
 
       //console.log(scene.isEnded);
       if (scene.isEnded) {
+        console.log("ok")
         gameEnd();
       }
     }
@@ -125,7 +127,7 @@ window.addEventListener("load", function () {
 
     function playAgain() {
       resetGame();
-
+      
       //hide the results and buttons
       gameOverContainer.style.display = "none";
 
@@ -168,13 +170,19 @@ window.addEventListener("load", function () {
 
       //Set Game Ended false
       scene.isEnded = false;
+
+      //Reset Game Over Container
+      const image1 = document.querySelector('img[alt="ninja"]');
+      const image2 = document.querySelector('img[alt="turtle"]');
+      image1.style.display = "none";
+      image2.style.display = "none";
     }
     function drawPlayer(image) {
       //console.log("cool")
       image.style.display = "block";
     }
   }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
   //vsComputer Mode
   function startvsComputerGame() {
         // Show canvas and hide menu on button click
@@ -204,6 +212,7 @@ window.addEventListener("load", function () {
 
             //console.log(scene.isEnded);
             if (scene.isEnded) {
+                console.log("kool")
                 gameEnd();
             }
         }
@@ -211,9 +220,7 @@ window.addEventListener("load", function () {
 
         function gameEnd() {
             const image1 = document.querySelector('img[alt="loose"]');
-            const image2 = document.querySelector('img[alt="turtle"]');
             image1.style.display = "none";
-            image2.style.display = "none";
 
             if (scene.timer <= 0) {
                 if (gameState.fighters[0].hitPoints > gameState.fighters[1].hitPoints) {
@@ -232,13 +239,15 @@ window.addEventListener("load", function () {
                 } 
                 else 
                 {
-                    winnerDisplay.textContent = `Draw`;
+                    winnerDisplay.textContent = `Game Over!!
+                    You lost`;
+                    drawPlayer(image1);
                     EndContainer();
                 }
             } 
             else if (gameState.fighters[0].hitPoints <= 0) 
             {
-                winnerDisplay.textContent = `You Lost`;
+                winnerDisplay.textContent = `Game Over!!You Lost`;
                 drawPlayer(image1);
                 EndContainer();
             } 
@@ -249,17 +258,20 @@ window.addEventListener("load", function () {
                 if (scene.fighters[1]) scene.fighters[1].position.x = 3000;
                 scene.fighters.splice(1, 1);
 
-                if(scene.fighters[0].position.x>350){
+                if(scene.fighters[0].position.x>350 && scene.level<3){
                     console.log("next scene")
                     context.clearRect(0, 0, canvas.width, canvas.height);
 
+                    scene.fighters[0].position.x=-10;
 
-                    
+                    //Increasing Level and adding new enemy
+                    scene.level++;
+                    scene.fighters.push(scene.otherFighters[scene.level]);
+                    scene.fighters[0].opponent=scene.fighters[1];
+                    scene.fighters[1].opponent=scene.fighters[0];
+                    console.log(scene.fighters)
+                    resetGame();
                 }
-
-                // scene.fighters[1]=null;
-                //resetGame()
-                /////////////
             }
         }
         function EndContainer() {
@@ -276,6 +288,8 @@ window.addEventListener("load", function () {
 
         function playAgain() {
             resetGame();
+            scene.level=0; //reset level
+            gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;//fighter health reset
 
             //hide the results and buttons
             gameOverContainer.style.display = "none";
@@ -293,6 +307,8 @@ window.addEventListener("load", function () {
             window.cancelAnimationFrame(animationFrameId);
 
             resetGame();
+            scene.level=0;//reset level
+            gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;//fighter health reset
 
             gameOverContainer.style.display = "none";
 
@@ -306,8 +322,7 @@ window.addEventListener("load", function () {
             scene.statusBar.healthBars[0].hitPoints = HEALTH_MAX_HIT_POINTS;
             scene.statusBar.healthBars[1].hitPoints = HEALTH_MAX_HIT_POINTS;
 
-            //fighter health reset
-            gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
+            //enemy health reset
             gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
 
             //timer reset
@@ -319,6 +334,9 @@ window.addEventListener("load", function () {
 
             //Set Game Ended false
             scene.isEnded = false;
+
+             //Reset Game Over Container
+             document.querySelector('img[alt="loose"]').style.display = "none";
         }
         function drawPlayer(image) {
             image.style.display = "block";

@@ -1,7 +1,6 @@
-
-export class Level1{
+export class Level3{
     constructor(){
-        this.image=document.querySelector('img[alt="background"]')
+        this.image=document.querySelector('img[alt="background3"]')
     }
 
     draw(context){

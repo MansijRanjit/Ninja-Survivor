@@ -1,19 +1,33 @@
 import { Ninja } from "../fighters/Ninja.js";
 import { Computer1 } from "../fighters/Computer1.js";
-import { Level1 } from "../Level1.js";
+import { Level1 } from "../backgrounds/Level1.js";
 import { FighterDirection} from "../Constants.js";
 import { StatusBar } from "../overlays/StatusBar.js";
 import { gameState } from "../state/gameState.js";
+import { Level2 } from "../backgrounds/Level2.js";
+import { Computer2 } from "../fighters/Computer2.js";
+import { Level3 } from "../backgrounds/Level3.js";
+import { Computer3 } from "../fighters/Computer3.js";
+import { Level4 } from "../backgrounds/Level4.js";
+import { Computer4 } from "../fighters/Computer4.js";
 
 export class vsCompBattleScene{
     fighters=[];
     entities=[];
     isEnded=false;
-
+    level=0
+    
     constructor(){
-        this.stage= new Level1();
-
+        this.stage= [new Level1(),new Level2(),new Level3(),new Level4()];
+        
         this.fighters=this.getFighters();
+
+        this.otherFighters=[
+            new Computer1(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this)),
+            new Computer2(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this)),
+            new Computer3(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this)),
+            new Computer4(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
+        ]
 
         this.statusBar= new StatusBar(this.fighters);
 
@@ -42,7 +56,7 @@ export class vsCompBattleScene{
 
     updateFighters(time,context,timer){
         for(const fighter of this.fighters){
-                fighter.update(time,context,timer)
+            fighter.update(time,context,timer)
         }
     }
     updateStatusBar(time){
@@ -61,7 +75,7 @@ export class vsCompBattleScene{
         //console.log(this.statusBar.time)
         //console.log(this.timer)
 
-        if(this.timer<=0 || gameState.fighters[0].hitPoints<=0 || gameState.fighters[1].hitPoints<=0){
+        if(this.timer<=0 || gameState.fighters[0].hitPoints<=0 || gameState.fighters[1].hitPoints<=0){           
             this.isEnded=true;
         }
     }
@@ -80,7 +94,7 @@ export class vsCompBattleScene{
         }
     }
     draw(context){
-        this.stage.draw(context)
+        this.stage[this.level].draw(context)
         this.drawFighters(context);
         this.drawStatusBar(context);
         this.drawEntities(context);

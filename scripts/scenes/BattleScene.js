@@ -1,9 +1,12 @@
 import { Ninja } from "../fighters/Ninja.js";
 import { enemy1 } from "../fighters/Enemy.js";
-import { Level1 } from "../Level1.js";
-import { FighterDirection,GameView } from "../Constants.js";
+import { Level1 } from "../backgrounds/Level1.js";
+import { FighterDirection,GameView ,FighterState} from "../Constants.js";
 import { StatusBar } from "../overlays/StatusBar.js";
 import { gameState } from "../state/gameState.js";
+import { Computer1 } from "../fighters/Computer1.js";
+import { Computer3 } from "../fighters/Computer3.js";
+import { Computer2 } from "../fighters/Computer2.js";
 
 export class BattleScene{
     fighters=[];
@@ -26,6 +29,7 @@ export class BattleScene{
     getFighters(){
         const fighters=[
             new Ninja(90,220,FighterDirection.RIGHT,0,this.addEntity.bind(this)),
+            //new enemy1(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
             new enemy1(290,220,FighterDirection.LEFT,1,this.addEntity.bind(this))
         ]
         return fighters;

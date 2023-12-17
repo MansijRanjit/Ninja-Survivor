@@ -4,6 +4,6 @@ import { createDefaultFighterState } from "./fighterState.js";
 export const gameState ={
     fighters: [
         createDefaultFighterState(FighterId.NINJA),
-        createDefaultFighterState(FighterId.TURTLE)
+        createDefaultFighterState(FighterId.ENEMY)
     ],
 }

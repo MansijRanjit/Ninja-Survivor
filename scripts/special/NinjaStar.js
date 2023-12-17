@@ -27,7 +27,7 @@ export class NinjaStar{
         }
         this.fighter=fighter;
         this.onEnd =onEnd;
-        this.velocity=250;//250
+        this.velocity=200;//250
         this.direction = this.fighter.direction;
         this.position={
             x: this.fighter.position.x + (26 * this.direction),

@@ -19,14 +19,14 @@ export class Ninja extends Fighter{
 
 
             //Move Forward/Backward
-            ['forward-1',[[[198,2411,82,99],[40,84]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['forward-2',[[[305,2410,80,97],[41,83]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['forward-3',[[[421,2412,66,97],[33,83]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['forward-4',[[[522,2413,59,94],[29,81]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['forward-5',[[[613,2414,57,96],[29,80]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['forward-6',[[[688,2415,60,95],[30,81]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['forward-7',[[[774,2413,66,96],[33,82]],PushBox.IDLE,HurtBoxNinja.IDLE]],
-            ['forward-8',[[[868,2411,80,97],[40,84]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-1',[[[198,2411,82,99],[40,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-2',[[[305,2410,80,97],[41,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-3',[[[421,2412,66,97],[33,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-4',[[[522,2413,59,94],[29,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-5',[[[613,2414,57,96],[29,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-6',[[[688,2415,60,95],[30,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-7',[[[774,2413,66,96],[33,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
+            ['forward-8',[[[868,2411,80,97],[40,89]],PushBox.IDLE,HurtBoxNinja.IDLE]],
 
             //Jump Up
             ['jump-up-1',[[[103,2681,54,117],[17,106]],PushBox.JUMP]],
@@ -41,9 +41,9 @@ export class Ninja extends Fighter{
             ['jump-roll-5',[[[632,2887,70,50],[35,49]],PushBox.JUMP]],
 
             //Crouch
-            ['crouch-1', [[[1126,122,65,86],[33,75]],PushBox.IDLE]],
-            ['crouch-2', [[[843,139,59,70],[30,60]],PushBox.BEND]],
-            ['crouch-3',[[[919,141,71,67],[35,57]],PushBox.CROUCH]],
+            ['crouch-1', [[[1126,122,65,86],[33,85]],PushBox.IDLE]], //y+10
+            ['crouch-2', [[[843,139,59,70],[30,70]],PushBox.CROUCH]],
+            ['crouch-3',[[[919,141,71,67],[35,67]],PushBox.CROUCH]],
 
             //Slash
             ['slash-1',[[[79,412,96,88],[49,88]],PushBox.IDLE,HurtBoxNinja.IDLE]], //, [17,-85,40,14]
@@ -152,4 +152,5 @@ export class Ninja extends Fighter{
         if(!this.isAnimationCompleted())return;
         this.changeState(FighterState.IDLE);
     }
+
 }

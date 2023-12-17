@@ -1,14 +1,14 @@
-import { FighterState, HurtBoxEnemy1, enemy1PushBox,FighterAttackBaseData ,FighterAttackType} from "../Constants.js";
+import { FighterState, HurtBoxTurtle, PushBox,FighterAttackBaseData ,FighterAttackType} from "../Constants.js";
 import { Fighter } from "./Fighter.js";
 import { NinjaStar } from "../special/NinjaStar.js";
 import * as inputKey from "../InputKeys.js";
 
 
-export class Computer1 extends Fighter{
+export class Computer2 extends Fighter{
     constructor(x,y,direction,playerId,addEntity){
-        super('computer1',x,y,direction,playerId);
+        super('computer2',x,y,direction,playerId);
 
-        this.image= document.querySelector('img[alt="enemy2"]');
+        this.image= document.querySelector('img[alt="enemy1"]');
 
         this.slashCount=0;
         this.kickCount=0;
@@ -16,54 +16,51 @@ export class Computer1 extends Fighter{
 
         this.frames= new Map([
             //Idle
-            ['idle-1',[[[658,13,46,92],[24,90]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['idle-2',[[[392,18,50,87],[25,90]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['idle-3',[[[658,13,46,92],[24,90]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
+            ['idle-1',[[[61,3,68,86],[34,85]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['idle-2',[[[135,1,64,88],[31,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['idle-3',[[[206,1,65,89],[32,89]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
 
-            //Move Forward/Backward
-            ['forward-1',[[[589,16,50,89],[26,89]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['forward-2',[[[524,17,49,88],[25,88]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['forward-3',[[[456,18,49,89],[25,89]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['forward-4',[[[387,18,50,88],[26,88]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['forward-5',[[[320,19,48,87],[25,87]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['forward-6',[[[255,18,49,87],[25,87]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
+            //Move Forward
+            ['forward-1',[[[5,108,66,85],[32,85]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['forward-2',[[[76,105,65,88],[31,87]],PushBox.IDLE,HurtBoxTurtle.direction]],
+            ['forward-3',[[[149,101,65,91],[33,90]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['forward-4',[[[220,101,65,90],[34,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['forward-5',[[[294,102,66,85],[33,86]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
 
             //Jump Up
-            ['jump-up-1',[[[591,454,39,80],[20,81]],enemy1PushBox.JUMP]],
-            ['jump-up-2',[[[538,454,44,73],[22,73]],enemy1PushBox.JUMP]],
-            ['jump-up-3',[[[475,469,48,61],[25,61]],enemy1PushBox.JUMP]],
-            ['jump-up-4',[[[399,469,63,65],[32,64]],enemy1PushBox.JUMP]],
-            ['jump-up-5',[[[338,469,51,63],[25,63]],enemy1PushBox.JUMP]],
+            ['jump-up-1',[[[7,711,102,89],[51,87]],PushBox.JUMP]],
+            ['jump-up-2',[[[117,713,102,74],[50,73]],PushBox.JUMP]],
+            ['jump-up-3',[[[231,699,61,88],[31,87]],PushBox.JUMP]],
+            ['jump-up-4',[[[301,701,58,94],[28,92]],PushBox.JUMP]],
 
-            
             //Jump Forward/Backward
-            ['jump-roll-1',[[[436,562,44,78],[22,78]],enemy1PushBox.JUMP]],
-            ['jump-roll-2',[[[492,564,71,76],[35,76]],enemy1PushBox.JUMP]],
-            ['jump-roll-3',[[[585,564,49,73],[24,74]],enemy1PushBox.JUMP]],
-            ['jump-roll-4',[[[646,564,53,65],[27,65]],enemy1PushBox.JUMP]],
-
+            ['jump-roll-1',[[[371,710,44,42],[22,42]],PushBox.JUMP]],
+            ['jump-roll-2',[[[427,708,41,44],[21,44]],PushBox.JUMP]],
+            ['jump-roll-3',[[[472,711,44,41],[23,41]],PushBox.JUMP]],
+            ['jump-roll-4',[[[520,709,41,44],[20,43]],PushBox.JUMP]],
 
             //Crouch
-            ['crouch-1', [[[278,262,51,63],[25,63]],enemy1PushBox.CROUCH]],
-            ['crouch-2', [[[211,261,52,64],[26,64]],enemy1PushBox.CROUCH]],
-            ['crouch-3', [[[146,260,53,64],[26,64]],enemy1PushBox.CROUCH]],
+            ['crouch-1', [[[22,418,66,76],[33,65]],PushBox.IDLE]],
+            ['crouch-2',[[[103,424,67,69],[34,58]],PushBox.CROUCH]],
+            ['crouch-3',[[[181,427,56,67],[28,57]],PushBox.CROUCH]],
 
-            
              //Slash
-             ['slash-1',[[[622,793,79,91],[41,90]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE, [17,-85,40,14]]],
-             ['slash-2',[[[513,793,98,91],[49,90]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE, [17,-85,40,14]]],
-             ['slash-3',[[[463,786,51,98],[25,99]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE, [17,-85,40,14]]],
-
+             ['slash-1',[[[75,222,80,78],[38,90]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
+             ['slash-2',[[[185,214,67,82],[32,90]],PushBox.IDLE,HurtBoxTurtle.IDLE,[17,-85,40,14]]],
+             ['slash-3',[[[266,227,86,65],[43,90]],PushBox.IDLE,HurtBoxTurtle.IDLE, [17,-85,40,14]]],
+        
+ 
              //Kick
-             ['kick-1',[[[204,1505,49,87],[25,88]],enemy1PushBox.IDLE, HurtBoxEnemy1.IDLE]],
-             ['kick-2',[[[103,1514,78,78],[39,88]],enemy1PushBox.IDLE, HurtBoxEnemy1.IDLE,[20,-79,32,14]]],//[17,-69,30,14]
+             ['kick-1',[[[1,319,74,82],[27,90]],PushBox.IDLE, HurtBoxTurtle.IDLE]],
+             ['kick-2',[[[89,309,97,96],[38,90]],PushBox.IDLE, HurtBoxTurtle.IDLE,[17,-69,20,14]]],//[17,-69,30,14]
 
              //Hurt
-             ['hurt-1',[[[593,1417,43,73],[22,83]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
+             ['hurt-1',[[[453,1216,58,74],[29,84]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
 
              //Special Move
-            ['special-1',[[[247,1174,50,86],[25,86]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
-            ['special-2',[[[158,1182,62,77],[31,87]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],
+            ['special-1',[[[158,902,76,98],[38,98]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['special-2',[[[245,915,66,82],[32,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]],
+            ['special-3',[[[325,942,68,54],[35,88]],PushBox.IDLE,HurtBoxTurtle.IDLE]], 
         ]);
 
         this.animations ={
@@ -72,15 +69,15 @@ export class Computer1 extends Fighter{
             ],
 
             [FighterState.WALK_FORWARD]:[
-                ['forward-1',65],['forward-2',65],['forward-3',65],['forward-4',65],['forward-5',65],['forward-6',-2]
+                ['forward-1',65],['forward-2',65],['forward-3',65],['forward-4',65],['forward-5',-2],
             ],
 
             [FighterState.WALK_BACKWARD]:[
-                ['forward-1',65],['forward-2',65],['forward-3',65],['forward-4',65],['forward-5',65],['forward-6',-2]
+                ['forward-1',65],['forward-2',65],['forward-3',65],['forward-4',65],['forward-5',65]
             ],
 
             [FighterState.JUMP_UP]: [
-                ['jump-up-1',200],['jump-up-2',200],['jump-up-3',200],['jump-up-4',200],['jump-up-5',-2]
+                ['jump-up-1',200],['jump-up-2',200],['jump-up-3',200],['jump-up-4',-2]
             ],
 
             [FighterState.JUMP_FORWARD]:[
@@ -106,7 +103,7 @@ export class Computer1 extends Fighter{
 
             [FighterState.SLASH]:
              [
-                ['slash-1',260],['slash-2',260],['slash-3',-2]
+                ['slash-1',60],['slash-2',60],['slash-3',260],['slash-2',260],['slash-1',-2]
              ],
 
             [FighterState.KICK]:
@@ -119,11 +116,12 @@ export class Computer1 extends Fighter{
             ],
 
             [FighterState.SPECIAL]:[
-                ['special-1',260],['special-2',260],['special-2',-2],
+                ['special-1',260],['special-2',260],['special-3',260],['special-2',-2],
             ]
 
         };
 
+        //////////////////////
         this.ninjaStar={fired:false, strength:FighterAttackBaseData[FighterAttackType.SPECIAL].damage}
         
         this.addEntity=addEntity;
@@ -148,9 +146,10 @@ export class Computer1 extends Fighter{
         if(!this.isAnimationCompleted())return;
         this.changeState(FighterState.IDLE);
     }
-   
+
     hitTimer=0;
     handleIdleState(){
+        
             function getRandomAttackState(){
                 const attacks=[FighterAttackType.KICK,FighterAttackType.SLASH,FighterAttackType.SPECIAL];
 
@@ -162,11 +161,13 @@ export class Computer1 extends Fighter{
                 // Increment slashCount only if the key was not pressed in the previous frame
                 if(!this.keyRPressed){
                     this.slashCount++;
-                    if(this.slashCount%4===0){
+                    //console.log(this.slashCount)
+                    //console.log(this.currentState)
+                    if(this.slashCount%3===0){
                         this.changeState(FighterState.CROUCH_DOWN);
                     }
 
-                    if(this.slashCount%3===0){
+                    if(this.slashCount%2===0){
                         this.changeState(getRandomAttackState());
                     }
                     this.keyRPressed=true;
@@ -180,10 +181,10 @@ export class Computer1 extends Fighter{
             if(inputKey.heldKeys.has("KeyT")){
                 if(!this.keyTPressed){
                     this.kickCount++;
-                    if(this.kickCount%3===0){ 
+                    if(this.kickCount%2===0){ 
                         this.changeState(FighterState.CROUCH_DOWN); 
                     }
-                    if(this.kickCount%2===0){
+                    if(this.kickCount%1===0){
                         this.changeState(getRandomAttackState()); 
                     }
                 }
@@ -196,10 +197,10 @@ export class Computer1 extends Fighter{
             if(inputKey.heldKeys.has("KeyY")){
                 if(!this.keyYPressed){
                     this.starCount++;
-                    if(this.starCount%3===0){
+                    if(this.starCount%2===0){
                         this.changeState(FighterState.JUMP_FORWARD);
                     }
-                    if(this.starCount%2===0){
+                    if(this.starCount%3===0){
                         this.changeState(FighterState.SPECIAL);
                     }
                 }
@@ -211,21 +212,25 @@ export class Computer1 extends Fighter{
 
 
             setTimeout(() => {
-                if(Math.abs(this.position.x-this.opponent.position.x) >83 ){
+                if(Math.abs(this.position.x-this.opponent.position.x) >70 ){
                     this.changeState(FighterState.WALK_FORWARD);           
                 }
             },5000)
 
             this.hitTimer++;
-            if(this.hitTimer%400===0){
-                if(Math.abs(this.position.x-this.opponent.position.x) <83 ){
+            if(this.hitTimer%300===0){// && inputKey.heldKeys.size===0
+                if(Math.abs(this.position.x-this.opponent.position.x) <70 ){
                     this.changeState(getRandomAttackState());
                 }
             }
+
+
     }
     handleWalkForwardState(){
         if(!this.isAnimationCompleted())return;
         this.changeState(FighterState.IDLE);
     }
+
+
 }
 

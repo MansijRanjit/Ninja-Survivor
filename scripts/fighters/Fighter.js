@@ -212,7 +212,8 @@ export class Fighter{
             this.changeState(FighterState.KICK);
         }
         else if(inputKey.isSpecial(this.playerId)){
-            this.changeState(FighterState.SPECIAL);
+            setTimeout(()=>{this.changeState(FighterState.SPECIAL);},500)
+            //this.changeState(FighterState.SPECIAL);
         }
     }
 
@@ -356,15 +357,14 @@ export class Fighter{
                 {x,y,width,height}
             );
 
-            if(boxOverlap(actualHitBox, actualOpponentsHurtBox)) {
-                const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
-
+            if(boxOverlap(actualHitBox, actualOpponentsHurtBox)) { 
                 const attack=this.states[this.currentState].attackType;
-
+                
                 if(gameState.fighters[this.opponent.playerId].hitPoints >0 && gameState.fighters[this.playerId].hitPoints >0){
                     this.updateHealth(attack);
                 }
-
+                
+                //const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
                 // console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
 
                 this.attackStruck=true;
@@ -507,6 +507,6 @@ export class Fighter{
         }
         context.setTransform(1,0,0,1,0,0);
 
-        //this.drawDebug(context);
+        this.drawDebug(context);
     }
 }

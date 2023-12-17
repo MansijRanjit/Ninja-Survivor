@@ -22,13 +22,21 @@ export const FighterState={
     KICK:'kick',
     HURT:'hurt',
     SPECIAL:'special',
+    END:'end'
 };
 
 export const PushBox ={
     IDLE:[-16,-80,32,78],//position calculated from origin
     JUMP:[-16,-91,32,66],
-    BEND:[-16,-58,32,58],
     CROUCH:[-16,-50,32,50],
+}
+export const enemy1PushBox ={
+    IDLE:[-16,-80,42,78],
+    JUMP:[-16,-91,42,66],
+    CROUCH:[-16,-50,42,50],
+    // IDLE:[-10,-90,32,88],//position calculated from origin
+    // JUMP:[-10,-101,32,66],
+    // CROUCH:[-10,-60,32,50],
 }
 
 export const PUSH_FRICTION=60;
@@ -38,6 +46,9 @@ export const HurtBoxTurtle ={
 }
 export const HurtBoxNinja ={
     IDLE:[[-8,-86,24,14],[-18,-72,40,40],[-20,-31,40,32]],//position calculated from origin
+}
+export const HurtBoxEnemy1 ={
+    IDLE:[[0,-91,24,14],[-10,-77,40,40],[-10,-37,40,32]],//position calculated from origin
 }
 
 export const FighterAttackType ={
@@ -49,10 +60,11 @@ export const FighterAttackType ={
 
 export const FighterId ={
     NINJA:'Ninja',
-    TURTLE:'Turtle'
+   // TURTLE:'Turtle'
+   ENEMY:'Enemy'
 }
 
-export const HEALTH_MAX_HIT_POINTS=144;
+export const HEALTH_MAX_HIT_POINTS=44;//144
 export const HEALTH_COLOR='#F3F300'; //remaining health -yellow color
 export const HEALTH_DAMAGE_COLOR='#F30000';//damage points -red color
 
