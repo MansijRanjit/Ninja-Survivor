@@ -115,7 +115,7 @@ export class Computer1 extends Fighter{
             ], 
 
             [FighterState.HURT]:[
-                ['hurt-1',500],['hurt-1',-2]
+                ['hurt-1',300],['hurt-1',-2]
             ],
 
             [FighterState.SPECIAL]:[
@@ -211,14 +211,14 @@ export class Computer1 extends Fighter{
 
 
             setTimeout(() => {
-                if(Math.abs(this.position.x-this.opponent.position.x) >83 ){
+                if(Math.abs(this.position.x-this.opponent.position.x) >78 ){
                     this.changeState(FighterState.WALK_FORWARD);           
                 }
             },5000)
 
             this.hitTimer++;
             if(this.hitTimer%400===0){
-                if(Math.abs(this.position.x-this.opponent.position.x) <83 ){
+                if(Math.abs(this.position.x-this.opponent.position.x) <78 ){
                     this.changeState(getRandomAttackState());
                 }
             }

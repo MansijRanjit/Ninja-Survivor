@@ -118,7 +118,7 @@ export class Ninja extends Fighter{
             ], 
 
             [FighterState.HURT]:[
-                ['hurt-1',500],['hurt-1',-2]
+                ['hurt-1',300],['hurt-1',-2]
             ],
 
             [FighterState.SPECIAL]:[

@@ -4,13 +4,14 @@ import { gameState } from "../state/gameState.js";
 export class StatusBar{
     constructor(fighters){
         this.image= document.querySelector('img[alt="miscellaneous"]');
+        this.arrowImg=document.querySelector('img[alt="arrowRight"');
 
         this.time=99;
         this.timeTimer=0;
         this.fighters=fighters;
+        this.isEnemyKilled=false;
 
         this.healthBars=[{
-            //timer:0,
             hitPoints:HEALTH_MAX_HIT_POINTS,
         }, {
            // timer:0,
@@ -36,7 +37,7 @@ export class StatusBar{
         for (const index in this.healthBars){
             if(this.healthBars[index].hitPoints <= gameState.fighters[index].hitPoints) continue;
             //reduce healthBars until it becomeless or equal to  fighter hitpoints
-            this.healthBars[index].hitPoints = Math.max(0, this.healthBars[index].hitPoints - (time.secPassed*90))
+            this.healthBars[index].hitPoints = Math.max(0, this.healthBars[index].hitPoints - (time.secPassed*500))//90
         }
     }
 
@@ -85,12 +86,80 @@ export class StatusBar{
             9
         );
     }
+    //Status Bar Draw of Multiplayer
     draw(context){
-        this.drawHealthBar(context);
+        if(!this.isEnemyKilled){
+            this.drawHealthBar(context);
+    
+            //Time display
+            const timeString = String(this.time).padStart(2,'00');
+    
+            this.drawFrame(context,`time-${timeString.charAt(0)}`,178,20);
+            this.drawFrame(context,`time-${timeString.charAt(1)}`,194,20);
 
-        const timeString = String(this.time).padStart(2,'00');
+            //Name display
+            context.fillStyle="white";//"#FF4500";
+            context.font="11px 'Arial',sans-serif";
+            context.fillText(`Player`,38,39);
 
-        this.drawFrame(context,`time-${timeString.charAt(0)}`,178,20);
-        this.drawFrame(context,`time-${timeString.charAt(1)}`,194,20);
+            context.fillStyle="white";//"red";
+            context.font="11px 'Arial',sans-serif";
+            context.fillText(`Player 2`,310,39);
+        }
+        else{
+            context.drawImage(
+                this.arrowImg,
+                120,240,
+                1043,1437,
+                330,
+                220-50,
+                40,50
+            )
+        }
+    }
+    //Status Bar Draw of vsComp
+    drawVsComp(context,level){
+        if(!this.isEnemyKilled){
+            this.drawHealthBar(context);
+    
+            //Time display
+            const timeString = String(this.time).padStart(2,'00');
+    
+            this.drawFrame(context,`time-${timeString.charAt(0)}`,178,20);
+            this.drawFrame(context,`time-${timeString.charAt(1)}`,194,20);
+
+            //Level display
+            context.fillStyle="black";
+            context.fillRect(150, 2, 70, 15); // Background rectangle
+
+            context.strokeStyle = "#fff"; // White border color
+            context.lineWidth = 2; // Border width
+            context.strokeRect(150, 2, 70, 15); // Border
+
+            context.font="bold 11px 'Arial',sans-serif";
+            context.fillStyle = "#fff"; // White text color
+            context.textAlign = "center"; // Center the text horizontally
+            context.textBaseline = "middle"; // Center the text vertically
+            context.fillText(`Level-${level+1}`,185,11);
+
+            //Name display
+            context.fillStyle="white";//"#FF4500";
+            context.font="11px 'Arial',sans-serif";
+            context.fillText(`Player`,47,36);
+
+            context.fillStyle="white";//"red";
+            context.font="11px 'Arial',sans-serif";
+            context.fillText(`Enemy`,330,36);
+        }
+        else{
+            context.drawImage(
+                this.arrowImg,
+                120,240,
+                1043,1437,
+                330,
+                220-50,
+                40,50
+            )
+        }
     }
 }

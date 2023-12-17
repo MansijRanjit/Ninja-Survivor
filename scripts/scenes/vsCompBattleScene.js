@@ -86,7 +86,7 @@ export class vsCompBattleScene{
         }
     }
     drawStatusBar(context){
-        this.statusBar.draw(context);
+        this.statusBar.drawVsComp(context,this.level);
     }
     drawEntities(context){
         for(const entity of this.entities){

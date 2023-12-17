@@ -1,7 +1,5 @@
 import { GameView, HEALTH_MAX_HIT_POINTS } from "./Constants.js";
 import { heldKeys, inputKeyboardEvents, pressedKeys } from "./InputKeys.js";
-import { Computer2 } from "./fighters/Computer2.js";
-import { FighterDirection } from "./Constants.js";
 import { BattleScene } from "./scenes/BattleScene.js";
 import { vsCompBattleScene } from "./scenes/vsCompBattleScene.js";
 import { gameState } from "./state/gameState.js";
@@ -22,12 +20,14 @@ window.addEventListener("load", function () {
   const vsComputerStartButton = document.getElementById(
     "vsComputerStart-button"
   );
+  const controls = this.document.getElementById("controls");
 
   //Result display items
   const winnerDisplay = document.getElementById("winner-display");
   const playAgainButton = document.getElementById("play-again-button");
   const returnToMenuButton = document.getElementById("return-to-menu-button");
   const gameOverContainer = document.querySelector(".game-over-container");
+  const controlsContainer = this.document.getElementById("controls-container");
 
   // Hide canvas and show menu initially
   canvas.style.display = "none";
@@ -39,17 +39,30 @@ window.addEventListener("load", function () {
   // Handle Start Game:vsComputer button click
   vsComputerStartButton.addEventListener("click", startvsComputerGame);
 
+  //Handle Controls Display
+  controls.addEventListener("click",showControls);
+  function showControls(){
+    controlsContainer.style.display ="flex";
+    menuContainer.style.display="none"
+
+    document.getElementById("return-menu").addEventListener("click", ()=>{
+      menuContainer.style.display = "flex";
+      controlsContainer.style.display="none";
+    });
+
+  }
+  //////////////////////////////////////////////////////////////////////////////////////////////
   //Multiplayer Mode
   function startMultiplayerGame() {
-    alert(`Player 1 moves:             Player 2 moves:   
-        A :Move Left                     LeftArrow :Move Left
-        D :Move Right                  RightArrow :Move Right
-        W :Jump up                      UpArrow :Jump up
-        S :Crouch/Block                DownArrow :Crouch/Block
-        R :Slash                             / :Slash
-        T :Kick                               . :Kick
-        Y :Special Move               , :Special Move
-            `);
+    // alert(`Player 1 moves:             Player 2 moves:   
+    //     A :Move Left                     LeftArrow :Move Left
+    //     D :Move Right                  RightArrow :Move Right
+    //     W :Jump up                      UpArrow :Jump up
+    //     S :Crouch/Block                DownArrow :Crouch/Block
+    //     R :Slash                             / :Slash
+    //     T :Kick                               . :Kick
+    //     Y :Special Move               , :Special Move
+    //         `);
 
     // Show canvas and hide menu on button click
     canvas.style.display = "block";
@@ -72,14 +85,11 @@ window.addEventListener("load", function () {
         secPassed: (time - frameTime.prevTime) / 1000,
         prevTime: time,
       };
-      //console.log(time);/////////
 
       scene.draw(context);
       scene.update(frameTime, context);
 
-      //console.log(scene.isEnded);
       if (scene.isEnded) {
-        console.log("ok")
         gameEnd();
       }
     }
@@ -178,7 +188,6 @@ window.addEventListener("load", function () {
       image2.style.display = "none";
     }
     function drawPlayer(image) {
-      //console.log("cool")
       image.style.display = "block";
     }
   }
@@ -210,9 +219,7 @@ window.addEventListener("load", function () {
             scene.draw(context);
             scene.update(frameTime, context);
 
-            //console.log(scene.isEnded);
             if (scene.isEnded) {
-                console.log("kool")
                 gameEnd();
             }
         }
@@ -220,46 +227,37 @@ window.addEventListener("load", function () {
 
         function gameEnd() {
             const image1 = document.querySelector('img[alt="loose"]');
-            image1.style.display = "none";
+            //image1.style.display = "none";
+            const imageWin = document.querySelector('img[alt="victory"]');
+            //imageWin.style.display="none";
 
-            if (scene.timer <= 0) {
-                if (gameState.fighters[0].hitPoints > gameState.fighters[1].hitPoints) {
-                    //scene.statusBar.time = 0;
-                    winnerDisplay.textContent = `Game Over!!
-                                You Lost`;
-                    drawPlayer(image1);
-                    EndContainer();
-                } 
-                else if (gameState.fighters[1].hitPoints > gameState.fighters[0].hitPoints) 
-                {
-                    winnerDisplay.textContent = `Game Over!!
-                                You lost`;
-                    drawPlayer(image1);
-                    EndContainer();
-                } 
-                else 
-                {
+            //Time over and level is valid
+            if (scene.timer <= 0 && scene.level<4) {
                     winnerDisplay.textContent = `Game Over!!
                     You lost`;
                     drawPlayer(image1);
-                    EndContainer();
-                }
+                    EndContainer();        
             } 
-            else if (gameState.fighters[0].hitPoints <= 0) 
+
+            //Player Health 0 and within level limit
+            if (gameState.fighters[0].hitPoints <= 0 && scene.level<4) 
             {
                 winnerDisplay.textContent = `Game Over!!You Lost`;
                 drawPlayer(image1);
                 EndContainer();
             } 
-            else if (gameState.fighters[1].hitPoints <= 0) 
+
+            //Enemy health 0
+            if (gameState.fighters[1].hitPoints <= 0) 
             {
                 scene.statusBar.time = 1000;
+                scene.statusBar.isEnemyKilled=true;//status bar removed
+
                 //remove the computer opponent by placing out and removing from array
                 if (scene.fighters[1]) scene.fighters[1].position.x = 3000;
                 scene.fighters.splice(1, 1);
 
-                if(scene.fighters[0].position.x>350 && scene.level<3){
-                    console.log("next scene")
+                if(scene.fighters[0].position.x>350 && scene.level<3){//3
                     context.clearRect(0, 0, canvas.width, canvas.height);
 
                     scene.fighters[0].position.x=-10;
@@ -269,9 +267,20 @@ window.addEventListener("load", function () {
                     scene.fighters.push(scene.otherFighters[scene.level]);
                     scene.fighters[0].opponent=scene.fighters[1];
                     scene.fighters[1].opponent=scene.fighters[0];
-                    console.log(scene.fighters)
                     resetGame();
                 }
+                
+                // console.log(scene.fighters[1])
+                // console.log(scene.otherFighters[3] )
+                // console.log(gameState.fighters[1].hitPoints)
+                // console.log(scene.level)
+
+                if(scene.fighters[0].position.x>350 && scene.level>=3){
+                  winnerDisplay.textContent = `Victory!!
+                   You Won`;
+                  drawPlayer(imageWin);
+                  EndContainer();
+               }
             }
         }
         function EndContainer() {
@@ -289,10 +298,15 @@ window.addEventListener("load", function () {
         function playAgain() {
             resetGame();
             scene.level=0; //reset level
+            
+            //Reset first enemy
+            scene.fighters[1]=scene.otherFighters[0];
+            scene.fighters[0].opponent=scene.fighters[1];
+            scene.fighters[1].opponent=scene.fighters[0];
+
             gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;//fighter health reset
 
-            //hide the results and buttons
-            gameOverContainer.style.display = "none";
+            gameOverContainer.style.display = "none";//hide the results and buttons
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             canvas.style.display = "block";
@@ -308,6 +322,7 @@ window.addEventListener("load", function () {
 
             resetGame();
             scene.level=0;//reset level
+
             gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;//fighter health reset
 
             gameOverContainer.style.display = "none";
@@ -318,6 +333,9 @@ window.addEventListener("load", function () {
         }
 
         function resetGame() {
+            //draw status bar contents
+            scene.statusBar.isEnemyKilled=false;
+
             //health bar display reset
             scene.statusBar.healthBars[0].hitPoints = HEALTH_MAX_HIT_POINTS;
             scene.statusBar.healthBars[1].hitPoints = HEALTH_MAX_HIT_POINTS;

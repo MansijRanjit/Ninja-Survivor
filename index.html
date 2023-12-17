@@ -12,12 +12,41 @@
         <h1>Ninja Survivor</h1>
         <button id="multiplayerStart-button">Start Game [Multiplayer]</button>
         <button id="vsComputerStart-button">Start Game [vs Computer]</button>
+        <button id="controls">Controls</button>
+    </div>
+
+     <!-- Container to display game controls -->
+     <div id="controls-container" style="display: none;">
+        <div class="controls">
+            <div class="control-1">
+                <h2>Player Control:</h2>
+                <p>A : Move Left</p>
+                <p>D : Move Right</p>
+                <p>W : Jump up</p>
+                <p>S : Crouch/Block</p>
+                <p>R : Slash</p>
+                <p>T : Kick</p>
+                <p>Y : Special Move</p>
+            </div>
+            <div class="control-2">
+                <h2>Player 2 Controls:</h2>
+                <p>LeftArrow : Move Left</p>
+                <p>RightArrow : Move Right</p>
+                <p>UpArrow : Jump up</p>
+                <p>DownArrow : Crouch/Block</p>
+                <p>/ : Slash</p>
+                <p>. : Kick</p>
+                <p>, : Special Move</p>
+            </div>     
+        </div>
+        <button id="return-menu">Return to Menu</button>
     </div>
 
     <!-- Game end and restart -->
     <div class="game-over-container" style="display: none;">
         <img src="assets/images/blue-ninja.png" alt="ninja">
         <img src="assets/images/ninjaLoose.png" alt="loose">
+        <img src="assets/images/blue-ninjaVictory.png" alt="victory">
         
         <img src="assets/images/enemy1.png" alt="turtle">
         <h1 id="winner-display" ></h1>
@@ -28,6 +57,7 @@
     <!-- Canvas -->
     <canvas></canvas>
     <img src="assets/images/miscellaneous.png" alt="miscellaneous">
+    <img src="assets/images/arrow right.png" alt="arrowRight">
 
     <img src="assets/images/blue-ninjaFull.png" alt="blueNinja">
     <img src="assets/images/turtleFull.png" alt="enemy1">

@@ -42,16 +42,40 @@ body{
 }
 canvas{
     /* margin: 50px 50px; */
-    display: block;
+    /* display: block;
     border: 2px solid black;
     background-color: gray;
     width: 100%;
     object-fit: contain;
-    image-rendering: crisp-edges;
+    image-rendering: crisp-edges; */
     /* image-rendering: pixelated; */
+    display: flex;
+    align-items: center;
+    margin: 80px auto;
+    object-fit: contain;
+    image-rendering: crisp-edges; 
 }
 
 img{
     display: none;
 }
+
+ #controls-container {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    padding: 30px 60px;
+    margin: 40px auto;
+    h2{
+        color: #0077cc;
+    }
+    .controls{
+        display: flex;
+        flex-direction: row;
+        justify-content:center;
+        align-items: center;
+        gap: 100px;
+    }
+}
+
 

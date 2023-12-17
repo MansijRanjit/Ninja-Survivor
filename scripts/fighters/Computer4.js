@@ -112,7 +112,7 @@ export class Computer4 extends Fighter{
             ], 
 
             [FighterState.HURT]:[
-                ['hurt-1',500],['hurt-1',-2]
+                ['hurt-1',300],['hurt-1',-2]
             ],
 
             [FighterState.SPECIAL]:[
@@ -148,8 +148,7 @@ export class Computer4 extends Fighter{
     }
 
     hitTimer=0;
-    handleIdleState(){
-        
+    handleIdleState(){ 
             function getRandomAttackState(){
                 const attacks=[FighterAttackType.KICK,FighterAttackType.SLASH,FighterAttackType.SPECIAL];
 
@@ -218,13 +217,11 @@ export class Computer4 extends Fighter{
             },5000)
 
             this.hitTimer++;
-            if(this.hitTimer%100===0){// && inputKey.heldKeys.size===0
+            if(this.hitTimer%100===0){
                 if(Math.abs(this.position.x-this.opponent.position.x) <70 ){
                     this.changeState(getRandomAttackState());
                 }
             }
-
-
     }
     handleWalkForwardState(){
         if(!this.isAnimationCompleted())return;
