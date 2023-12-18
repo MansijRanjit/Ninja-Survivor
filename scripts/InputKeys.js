@@ -7,8 +7,6 @@ export const pressedKeys = new Set();
 function handleKeyDown(event){
     event.preventDefault();//prevent default behaviour assssociated with the keydown event
     heldKeys.add(event.code);//adds the key code of the pressed key to the heldKeys Set
-
-    //console.log(heldKeys)
 }
 function handleKeyUp(event){
     event.preventDefault();

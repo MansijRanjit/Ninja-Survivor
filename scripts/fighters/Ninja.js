@@ -7,7 +7,7 @@ export class Ninja extends Fighter{
     constructor(x,y,direction,playerId,addEntity){
         super("Ninja",x,y,direction,playerId);
 
-        this.image=document.querySelector('img[alt="blueNinja"]');
+        this.image=document.querySelector('img[alt="blueNinja"]');  
         
         this.frames=new Map([
             //Idle
@@ -125,7 +125,6 @@ export class Ninja extends Fighter{
                 ['special-1',60],['special-2',60],['special-3',60],['special-4',260],['special-4',-2],
             ]
         };
-        /////////////////////////
 
         this.ninjaStar={fired:false, strength:FighterAttackBaseData[FighterAttackType.SPECIAL].damage}
         
@@ -146,7 +145,6 @@ export class Ninja extends Fighter{
         if(!this.ninjaStar.fired && this.animationFrame ===2){
             this.ninjaStar.fired = true;
             this.addEntity(NinjaStar,time,this,this.ninjaStar.strength);
-           // console.log('ok')
         }
 
         if(!this.isAnimationCompleted())return;

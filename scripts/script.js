@@ -22,6 +22,10 @@ window.addEventListener("load", function () {
   );
   const controls = this.document.getElementById("controls");
 
+  //Sounds
+  const menuMusic= this.document.getElementById("menuSound");
+  const musicFight =document.querySelector("#ninjaSound")
+
   //Result display items
   const winnerDisplay = document.getElementById("winner-display");
   const playAgainButton = document.getElementById("play-again-button");
@@ -42,6 +46,10 @@ window.addEventListener("load", function () {
   //Handle Controls Display
   controls.addEventListener("click",showControls);
   function showControls(){
+    menuMusic.play();
+    musicFight.pause();
+    musicFight.currentTime=0;
+
     controlsContainer.style.display ="flex";
     menuContainer.style.display="none"
 
@@ -51,18 +59,13 @@ window.addEventListener("load", function () {
     });
 
   }
-  //////////////////////////////////////////////////////////////////////////////////////////////
+  ////
   //Multiplayer Mode
   function startMultiplayerGame() {
-    // alert(`Player 1 moves:             Player 2 moves:   
-    //     A :Move Left                     LeftArrow :Move Left
-    //     D :Move Right                  RightArrow :Move Right
-    //     W :Jump up                      UpArrow :Jump up
-    //     S :Crouch/Block                DownArrow :Crouch/Block
-    //     R :Slash                             / :Slash
-    //     T :Kick                               . :Kick
-    //     Y :Special Move               , :Special Move
-    //         `);
+
+    menuMusic.pause();
+    menuMusic.currentTime=0;
+    musicFight.play();
 
     // Show canvas and hide menu on button click
     canvas.style.display = "block";
@@ -97,6 +100,11 @@ window.addEventListener("load", function () {
 
     //After game over
     function gameEnd() {
+      menuMusic.pause();
+      menuMusic.currentTime = 0;
+      musicFight.pause();
+      musicFight.currentTime = 0;
+
       const image1 = document.querySelector('img[alt="ninja"]');
       const image2 = document.querySelector('img[alt="turtle"]');
       image1.style.display = "none";
@@ -137,6 +145,9 @@ window.addEventListener("load", function () {
 
     function playAgain() {
       resetGame();
+      menuMusic.pause();
+      menuMusic.currentTime=0;
+      musicFight.play();
       
       //hide the results and buttons
       gameOverContainer.style.display = "none";
@@ -146,6 +157,10 @@ window.addEventListener("load", function () {
     }
 
     function moveToMenu() {
+      menuMusic.play();
+      musicFight.pause();
+      musicFight.currentTime=0;
+
       //Cancel the previous animation frame request
       window.cancelAnimationFrame(animationFrameId);
 
@@ -191,9 +206,13 @@ window.addEventListener("load", function () {
       image.style.display = "block";
     }
   }
-/////////////////////////////////////////////////////////////////////////////////////////////////
+  /////
   //vsComputer Mode
   function startvsComputerGame() {
+        menuMusic.pause();
+        menuMusic.currentTime=0;
+        musicFight.play();
+
         // Show canvas and hide menu on button click
         canvas.style.display = "block";
         menuContainer.style.display = "none";
@@ -269,11 +288,6 @@ window.addEventListener("load", function () {
                     scene.fighters[1].opponent=scene.fighters[0];
                     resetGame();
                 }
-                
-                // console.log(scene.fighters[1])
-                // console.log(scene.otherFighters[3] )
-                // console.log(gameState.fighters[1].hitPoints)
-                // console.log(scene.level)
 
                 if(scene.fighters[0].position.x>350 && scene.level>=3){
                   winnerDisplay.textContent = `Victory!!
@@ -284,6 +298,11 @@ window.addEventListener("load", function () {
             }
         }
         function EndContainer() {
+            menuMusic.pause();
+            menuMusic.currentTime = 0;
+            musicFight.pause();
+            musicFight.currentTime = 0;
+
             // Hide the canvas
             const canvas = document.querySelector("canvas");
             canvas.style.display = "none";
@@ -296,6 +315,10 @@ window.addEventListener("load", function () {
         }
 
         function playAgain() {
+            menuMusic.pause();
+            menuMusic.currentTime = 0;
+            musicFight.play();
+
             resetGame();
             scene.level=0; //reset level
             
@@ -317,6 +340,10 @@ window.addEventListener("load", function () {
         }
 
         function moveToMenu() {
+            musicFight.pause();
+            musicFight.currentTime=0;
+            menuMusic.play();
+
             //Cancel the previous animation frame request
             window.cancelAnimationFrame(animationFrameId);
 

@@ -121,7 +121,7 @@ export class Computer4 extends Fighter{
 
         };
 
-        //////////////////////
+        //
         this.ninjaStar={fired:false, strength:FighterAttackBaseData[FighterAttackType.SPECIAL].damage}
         
         this.addEntity=addEntity;
@@ -160,8 +160,7 @@ export class Computer4 extends Fighter{
                 // Increment slashCount only if the key was not pressed in the previous frame
                 if(!this.keyRPressed){
                     this.slashCount++;
-                    //console.log(this.slashCount)
-                    //console.log(this.currentState)
+                    
                     if(this.slashCount%2===0){
                         this.changeState(FighterState.CROUCH_DOWN);
                     }

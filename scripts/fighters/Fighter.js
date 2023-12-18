@@ -157,8 +157,6 @@ export class Fighter{
     changeState(newState){
         if(newState == this.currentState || !this.states[newState].validFrom.includes(this.currentState)) return;
 
-       // console.log(this.currentState)
-       // console.log(newState)
         this.currentState=newState;
         this.animationFrame=0;
 
@@ -175,8 +173,6 @@ export class Fighter{
     }
     handleJumpInit(){
         this.velocity.y=this.initialVelocity.jump;
-        //console.log(this.velocity.y);
-
         this.handleMoveInit();
     }
     handleCrouchDownInit(){
@@ -363,9 +359,6 @@ export class Fighter{
                 if(gameState.fighters[this.opponent.playerId].hitPoints >0 && gameState.fighters[this.playerId].hitPoints >0){
                     this.updateHealth(attack);
                 }
-                
-                //const hurtIndex = this.opponent.boxes.hurt.indexOf(hurt);
-                // console.log(`${this.name} has hit ${this.opponent.name}'s ${hurtIndex}`);
 
                 this.attackStruck=true;
                 return;
@@ -394,7 +387,7 @@ export class Fighter{
         this.updateAnimation(time);
         this.updateLevelConstraints(time,context);
         this.updateAttackBoxCollided(time);
-        /////////////////////
+        //
         this.timer=timer;
     
     }

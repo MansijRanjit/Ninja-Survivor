@@ -34,9 +34,6 @@ export const enemy1PushBox ={
     IDLE:[-16,-80,42,78],
     JUMP:[-16,-91,42,66],
     CROUCH:[-16,-50,42,50],
-    // IDLE:[-10,-90,32,88],//position calculated from origin
-    // JUMP:[-10,-101,32,66],
-    // CROUCH:[-10,-60,32,50],
 }
 
 export const PUSH_FRICTION=60;
@@ -83,9 +80,3 @@ export const NinjaStarState={
     ACTIVE: 'active',
     COLLIDED: 'collided',
 }
-
-// export const NinjaStarCollidedState ={
-//     NONE:'none',
-//     OPPONENT:'opponent',
-//     NINJASTAR:'ninjaStar'
-// }

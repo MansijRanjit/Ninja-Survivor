@@ -116,13 +116,6 @@ export class enemy1 extends Fighter{
 
         };
 
-        // this.initialVelocity ={
-        //     jump:-10
-        // }
-        
-        // console.log(this.initialVelocity.jump)
-        // console.log(this.velocity.y)
-        //////////////////////
         this.ninjaStar={fired:false, strength:FighterAttackBaseData[FighterAttackType.SPECIAL].damage}
         
         this.addEntity=addEntity;

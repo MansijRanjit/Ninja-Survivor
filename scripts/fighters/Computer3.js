@@ -147,8 +147,7 @@ export class Computer3 extends Fighter{
                 // Increment slashCount only if the key was not pressed in the previous frame
                 if(!this.keyRPressed){
                     this.slashCount++;
-                    //console.log(this.slashCount)
-                    //console.log(this.currentState)
+                    
                     if(this.slashCount%3===0){
                         this.changeState(FighterState.CROUCH_DOWN);
                     }
@@ -196,10 +195,6 @@ export class Computer3 extends Fighter{
             else{
                 this.keyYPressed=false
             }
-            // if(inputKey.heldKeys.has("KeyY")){
-            //     this.changeState(FighterState.JUMP_UP);
-            // }
-
 
             setTimeout(() => {
                 if(Math.abs(this.position.x-this.opponent.position.x) >70 ){
