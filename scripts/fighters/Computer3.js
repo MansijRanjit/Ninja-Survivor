@@ -1,6 +1,5 @@
 import { FighterState, HurtBoxTurtle, PushBox,FighterAttackBaseData ,FighterAttackType, HurtBoxNinja} from "../Constants.js";
 import { Fighter } from "./Fighter.js";
-import { NinjaStar } from "../special/NinjaStar.js";
 import * as inputKey from "../InputKeys.js";
 
 

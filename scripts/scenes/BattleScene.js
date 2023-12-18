@@ -4,9 +4,6 @@ import { Level1 } from "../backgrounds/Level1.js";
 import { FighterDirection,GameView ,FighterState} from "../Constants.js";
 import { StatusBar } from "../overlays/StatusBar.js";
 import { gameState } from "../state/gameState.js";
-import { Computer1 } from "../fighters/Computer1.js";
-import { Computer3 } from "../fighters/Computer3.js";
-import { Computer2 } from "../fighters/Computer2.js";
 
 export class BattleScene{
     fighters=[];
@@ -23,7 +20,6 @@ export class BattleScene{
         this.fighters[0].opponent=this.fighters[1];
         this.fighters[1].opponent=this.fighters[0];
 
-        this.timer=0;
     }
 
     getFighters(){
@@ -44,9 +40,9 @@ export class BattleScene{
         this.entities = this.entities.filter((thisEntity) => thisEntity !==entity);// keeping only those entities that are not equal to the specified entity i.e.removing the specified entity from the array.
     }
 
-    updateFighters(time,context,timer){
+    updateFighters(time,context){
         for(const fighter of this.fighters){
-            fighter.update(time,context,timer)
+            fighter.update(time,context)
         }
     }
     updateStatusBar(time){
@@ -62,8 +58,6 @@ export class BattleScene{
         this.updateFighters(time,context,this.timer);
         this.updateStatusBar(time);
         this.updateEntities(time,context);
-        //console.log(this.statusBar.time)
-        //console.log(this.timer)
 
         if(this.timer<=0 || gameState.fighters[0].hitPoints<=0 || gameState.fighters[1].hitPoints<=0){
             this.isEnded=true;

@@ -1,4 +1,4 @@
-import { HEALTH_DAMAGE_COLOR, HEALTH_MAX_HIT_POINTS } from "../Constants.js";
+import { HEALTH_DAMAGE_COLOR, HEALTH_MAX_HIT_POINTS, HEALTH_COLOR } from "../Constants.js";
 import { gameState } from "../state/gameState.js";
 
 export class StatusBar{
@@ -14,7 +14,6 @@ export class StatusBar{
         this.healthBars=[{
             hitPoints:HEALTH_MAX_HIT_POINTS,
         }, {
-           // timer:0,
             hitPoints:HEALTH_MAX_HIT_POINTS,
         }]
         this.frames=new Map([
@@ -37,7 +36,7 @@ export class StatusBar{
         for (const index in this.healthBars){
             if(this.healthBars[index].hitPoints <= gameState.fighters[index].hitPoints) continue;
             //reduce healthBars until it becomeless or equal to  fighter hitpoints
-            this.healthBars[index].hitPoints = Math.max(0, this.healthBars[index].hitPoints - (time.secPassed*500))//90
+            this.healthBars[index].hitPoints = Math.max(0, this.healthBars[index].hitPoints - (time.secPassed*500))//90           
         }
     }
 

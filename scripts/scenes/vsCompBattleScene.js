@@ -10,6 +10,7 @@ import { Level3 } from "../backgrounds/Level3.js";
 import { Computer3 } from "../fighters/Computer3.js";
 import { Level4 } from "../backgrounds/Level4.js";
 import { Computer4 } from "../fighters/Computer4.js";
+import { Health } from "../special/health.js";
 
 export class vsCompBattleScene{
     fighters=[];
@@ -30,6 +31,9 @@ export class vsCompBattleScene{
         ]
 
         this.statusBar= new StatusBar(this.fighters);
+
+        this.health= new Health(this.fighters,this.level);
+
 
         this.fighters[0].opponent=this.fighters[1];
         this.fighters[1].opponent=this.fighters[0];
@@ -54,9 +58,9 @@ export class vsCompBattleScene{
         this.entities = this.entities.filter((thisEntity) => thisEntity !==entity);// keeping only those entities that are not equal to the specified entity i.e.removing the specified entity from the array.
     }
 
-    updateFighters(time,context,timer){
+    updateFighters(time,context){
         for(const fighter of this.fighters){
-            fighter.update(time,context,timer)
+            fighter.update(time,context)
         }
     }
     updateStatusBar(time){
@@ -69,11 +73,11 @@ export class vsCompBattleScene{
     }
     update(time,context){
         this.timer=this.statusBar.time;
-        this.updateFighters(time,context,this.timer);
+        this.updateFighters(time,context);
         this.updateStatusBar(time);
         this.updateEntities(time,context);
-        //console.log(this.statusBar.time)
-        //console.log(this.timer)
+    
+        this.health.update(context,this.level)
 
         if(this.timer<=0 || gameState.fighters[0].hitPoints<=0 || gameState.fighters[1].hitPoints<=0){           
             this.isEnded=true;
@@ -98,6 +102,10 @@ export class vsCompBattleScene{
         this.drawFighters(context);
         this.drawStatusBar(context);
         this.drawEntities(context);
+
+        if(this.level===2){
+            this.health.draw(context);   
+        }
     }
 
 }

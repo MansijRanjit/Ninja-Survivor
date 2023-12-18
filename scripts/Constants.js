@@ -69,7 +69,7 @@ export const FighterAttackBaseData ={
         damage:5
     },
     [FighterAttackType.KICK]:{
-        damage:2
+        damage:3
     },
     [FighterAttackType.SPECIAL]:{
         damage:5

@@ -1,84 +1,74 @@
-import { FighterAttackType, GameView, NinjaStarState } from "../Constants.js";
+import { FighterAttackType, GameView, NinjaStarState,HEALTH_MAX_HIT_POINTS} from "../Constants.js";
 import { getActualBoxDimensions ,boxOverlap} from "../collisions.js";
+import { StatusBar } from "../overlays/StatusBar.js";
+import { gameState } from "../state/gameState.js";
 
 export class Health{
     image = document.querySelector('img[alt="healthPotion"]');
     
-    animationFrame=0;
-
-    constructor(fighter,time){
-        this.frames = new Map([
-            ['health',[[[79,23,101,133],[51,132]],[-15,-13,30,24],[-28,-20,56,30]]],
-
-        ]);
+    constructor(fighters){
+        this.fighters=fighters;
         
-        this.animations ={
-            [NinjaStarState.ACTIVE]:[
-                ['health',60],['health',60]
-            ],
-            [NinjaStarState.COLLIDED]:[
-                [],[]
-            ],
-           
-        }
-        this.fighter=fighter;
-        this.direction=1;
+        this.statusBar = new StatusBar(this.fighters);
+
+        this.isHealthAvailable=true; //draw potion
         
         this.position={
             x: 200,
-            y: 40,
+            y: 60,
         };
-        this.animationTimer = time.prevTime;
     }
 
     hasCollidedWithFighter(){
-        const [x,y,width,height]= [-15,-13,30,24];
-
-        const actualHitBox = getActualBoxDimensions(this.position,this.direction, {x,y,width,height});
-
-        for(const push of this.fighter.boxes.push){
-            const [x,y,width,height] =push;
-            const actualFighterPushBox = getActualBoxDimensions(
-                this.fighter.position,
-                this.fighter.direction,
-                {x,y,width,height}
-            );
-
-            if(boxOverlap(actualHitBox, actualFighterPushBox)) {
+            const [x,y,width,height] =[this.fighters[0].boxes.push];
+            if(boxOverlap(
+                {
+                    x:this.position.x,
+                    y:this.position.y,
+                    width:20,
+                    height:20
+                },
+               {
+                    x:this.fighters[0].position.x+this.fighters[0].boxes.push.x,
+                    y:this.fighters[0].position.y+ this.fighters[0].boxes.push.y,
+                    width:this.fighters[0].boxes.push.width,
+                    height:this.fighters[0].boxes.push.height
+                }
+            )){
+                //console.log("collided")
                 return true;
             }
-        }
-        return false;
+            else{
+                return false;
+            }
     }
-    updateMovement(time){
 
+    update(context,level){
         const hasCollided = this.hasCollidedWithFighter();
         if(!hasCollided) return;
-
-        this.state = NinjaStarState.COLLIDED;
-       
-        gameState.fighters[this.fighter.playerId].hitPoints +=50
-    }
-
-    update(time){
-        this.updateMovement(time);
+        if(hasCollided&& level===2){
+            if(this.isHealthAvailable){
+                gameState.fighters[this.fighters[0].playerId].hitPoints +=50
+                this.statusBar.healthBars[0].hitPoints += 50
+                
+            }
+            this.isHealthAvailable=false;
+        }
     }
 
     draw(context){
-        const [[
-            [x,y,width,height],
-            [originX,originY]
-        ]]=[[79,23,101,133],[51,132]]
-
-        context.drawImage(
-                this.image,
-                x,y,
-                width,
-                height,
-                this.position.x - originX,
-                this.position.y - originY,
-                width,height
-        );
-
+        if(this.isHealthAvailable){
+            const [x,y,width,height]=[79,23,101,133]
+    
+            context.drawImage(
+                    this.image,
+                    x,y,
+                    width,
+                    height,
+                    this.position.x,
+                    this.position.y,
+                    20,20
+            );
+        }
     }
 }

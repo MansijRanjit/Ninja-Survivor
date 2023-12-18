@@ -56,7 +56,7 @@ export class Computer1 extends Fighter{
 
              //Kick
              ['kick-1',[[[204,1505,49,87],[25,88]],enemy1PushBox.IDLE, HurtBoxEnemy1.IDLE]],
-             ['kick-2',[[[103,1514,78,78],[39,88]],enemy1PushBox.IDLE, HurtBoxEnemy1.IDLE,[20,-79,32,14]]],//[17,-69,30,14]
+             ['kick-2',[[[103,1514,78,78],[39,88]],enemy1PushBox.IDLE, HurtBoxEnemy1.IDLE,[20,-79,32,14]]],
 
              //Hurt
              ['hurt-1',[[[593,1417,43,73],[22,83]],enemy1PushBox.IDLE,HurtBoxEnemy1.IDLE]],

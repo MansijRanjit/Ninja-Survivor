@@ -121,7 +121,6 @@ export class Computer4 extends Fighter{
 
         };
 
-        //
         this.ninjaStar={fired:false, strength:FighterAttackBaseData[FighterAttackType.SPECIAL].damage}
         
         this.addEntity=addEntity;

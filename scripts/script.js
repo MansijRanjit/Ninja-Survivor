@@ -382,6 +382,9 @@ window.addEventListener("load", function () {
 
              //Reset Game Over Container
              document.querySelector('img[alt="loose"]').style.display = "none";
+
+             //immune potion reset
+             scene.health.isHealthAvailable=true;
         }
         function drawPlayer(image) {
             image.style.display = "block";

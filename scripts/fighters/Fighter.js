@@ -1,8 +1,6 @@
 import { FighterAttackBaseData, FighterAttackType, FighterDirection, FighterState, PUSH_FRICTION } from "../Constants.js";
 import * as inputKey from "../InputKeys.js";
-import { Control } from "../KeysControl.js";
 import { boxOverlap, getActualBoxDimensions, rectCollision } from "../collisions.js";
-import { StatusBar } from "../overlays/StatusBar.js";
 import { gameState } from "../state/gameState.js";
 
 export class Fighter{
@@ -30,7 +28,7 @@ export class Fighter{
             jump:-500
         };
         this.gravity=1000;
-        this.currentState=FighterState.IDLE;//self
+        this.currentState=FighterState.IDLE;
         this.attackStruck=false;
 
         this.opponent;
@@ -208,7 +206,7 @@ export class Fighter{
             this.changeState(FighterState.KICK);
         }
         else if(inputKey.isSpecial(this.playerId)){
-            setTimeout(()=>{this.changeState(FighterState.SPECIAL);},500)
+            setTimeout(()=>{this.changeState(FighterState.SPECIAL);},400)
             //this.changeState(FighterState.SPECIAL);
         }
     }
@@ -372,7 +370,7 @@ export class Fighter{
             gameState.fighters[this.opponent.playerId].hitPoints -=FighterAttackBaseData[attack].damage;
     }
 
-    update(time, context,timer){
+    update(time, context){
         this.position.x += (this.velocity.x * this.direction) *time.secPassed;
         this.position.y += this.velocity.y *time.secPassed;
 
@@ -386,10 +384,7 @@ export class Fighter{
         this.states[this.currentState].update(time,context);//calls  update: ..State()
         this.updateAnimation(time);
         this.updateLevelConstraints(time,context);
-        this.updateAttackBoxCollided(time);
-        //
-        this.timer=timer;
-    
+        this.updateAttackBoxCollided(time);    
     }
 
     //drawing boxes

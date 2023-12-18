@@ -1,7 +1,6 @@
 import { FighterAttackBaseData, FighterState, HurtBoxNinja, PushBox,FighterAttackType } from "../Constants.js";
 import { Fighter } from "../fighters/Fighter.js";
 import { NinjaStar } from "../special/NinjaStar.js";
-import { gameState } from "../state/gameState.js";
 
 export class Ninja extends Fighter{
     constructor(x,y,direction,playerId,addEntity){
@@ -46,7 +45,7 @@ export class Ninja extends Fighter{
             ['crouch-3',[[[919,141,71,67],[35,67]],PushBox.CROUCH]],
 
             //Slash
-            ['slash-1',[[[79,412,96,88],[49,88]],PushBox.IDLE,HurtBoxNinja.IDLE]], //, [17,-85,40,14]
+            ['slash-1',[[[79,412,96,88],[49,88]],PushBox.IDLE,HurtBoxNinja.IDLE]], 
             ['slash-2',[[[205,410,143,88],[41,88]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
             ['slash-3',[[[362,406,152,91],[42,91]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
             ['slash-4',[[[531,403,130,92],[35,91]],PushBox.IDLE,HurtBoxNinja.IDLE, [17,-85,40,14]]],
